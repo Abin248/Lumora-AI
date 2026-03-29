@@ -9,8 +9,16 @@ const interviewRoutes = require('./routes/interviewRoutes');
 
 const app = express();
 
+const corsOptions = {
+    origin: [
+        "http://localhost:5173", 
+        "https://lumoraai-frontend.vercel.app/" // later replace
+    ],
+    credentials: true
+};
 // Middleware
-app.use(cors());
+//app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Routes
