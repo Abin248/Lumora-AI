@@ -12,7 +12,7 @@ const app = express();
 const corsOptions = {
     origin: [
         "http://localhost:5173", 
-        "https://lumora-hazel.vercel.app" // later replace
+        "https://lumora-ai-vert.vercel.app" // later replace
     ],
     credentials: true
 };
