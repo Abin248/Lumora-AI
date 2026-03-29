@@ -175,61 +175,137 @@ const BuildResume = () => {
         }));
     };
 
-    // Render Personal Info
+    // ==================== RENDER FUNCTIONS (SLIGHTLY LARGER) ====================
+
     const renderPersonalInfo = () => (
-        <div className="space-y-4 animate-fade-in">
+        <div className="space-y-5 animate-fade-in">
             <h3 className="text-xl font-bold text-gray-800">Personal Information</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
-                    <input type="text" placeholder="Full Name" className={`p-3 border rounded-lg w-full ${errors.fullName ? 'border-red-500' : ''}`} value={formData.personalInfo.fullName} onChange={e => handleChange('personalInfo', 'fullName', e.target.value)} />
+                    <input
+                        type="text"
+                        placeholder="Full Name"
+                        className={`p-3 border rounded-md w-full text-base ${errors.fullName ? 'border-red-500' : ''}`}
+                        value={formData.personalInfo.fullName}
+                        onChange={e => handleChange('personalInfo', 'fullName', e.target.value)}
+                    />
                     {errors.fullName && <p className="text-red-500 text-xs mt-1">{errors.fullName}</p>}
                 </div>
                 <div>
-                    <input type="text" placeholder="Professional Title (e.g. Software Engineer)" className="p-3 border rounded-lg w-full" value={formData.personalInfo.title} onChange={e => handleChange('personalInfo', 'title', e.target.value)} />
+                    <input
+                        type="text"
+                        placeholder="Professional Title (e.g. Software Engineer)"
+                        className="p-3 border rounded-md w-full text-base"
+                        value={formData.personalInfo.title}
+                        onChange={e => handleChange('personalInfo', 'title', e.target.value)}
+                    />
                 </div>
                 <div>
-                    <input type="email" placeholder="Email" className={`p-3 border rounded-lg w-full ${errors.email ? 'border-red-500' : ''}`} value={formData.personalInfo.email} onChange={e => handleChange('personalInfo', 'email', e.target.value)} />
+                    <input
+                        type="email"
+                        placeholder="Email"
+                        className={`p-3 border rounded-md w-full text-base ${errors.email ? 'border-red-500' : ''}`}
+                        value={formData.personalInfo.email}
+                        onChange={e => handleChange('personalInfo', 'email', e.target.value)}
+                    />
                     {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
                 </div>
                 <div>
-                    <input type="text" placeholder="Phone" className={`p-3 border rounded-lg w-full ${errors.phone ? 'border-red-500' : ''}`} value={formData.personalInfo.phone} onChange={e => handleChange('personalInfo', 'phone', e.target.value)} />
+                    <input
+                        type="text"
+                        placeholder="Phone"
+                        className={`p-3 border rounded-md w-full text-base ${errors.phone ? 'border-red-500' : ''}`}
+                        value={formData.personalInfo.phone}
+                        onChange={e => handleChange('personalInfo', 'phone', e.target.value)}
+                    />
                     {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
                 </div>
-                <input type="text" placeholder="LinkedIn URL" className="p-3 border rounded-lg w-full" value={formData.personalInfo.linkedin} onChange={e => handleChange('personalInfo', 'linkedin', e.target.value)} />
-                <input type="text" placeholder="GitHub URL" className="p-3 border rounded-lg w-full" value={formData.personalInfo.github} onChange={e => handleChange('personalInfo', 'github', e.target.value)} />
+                <input
+                    type="text"
+                    placeholder="LinkedIn URL"
+                    className="p-3 border rounded-md w-full text-base"
+                    value={formData.personalInfo.linkedin}
+                    onChange={e => handleChange('personalInfo', 'linkedin', e.target.value)}
+                />
+                <input
+                    type="text"
+                    placeholder="GitHub URL"
+                    className="p-3 border rounded-md w-full text-base"
+                    value={formData.personalInfo.github}
+                    onChange={e => handleChange('personalInfo', 'github', e.target.value)}
+                />
             </div>
-            <div className="mt-4">
+            <div className="mt-5">
                 <label className="block text-sm font-medium mb-1">Professional Summary</label>
-                <textarea rows="4" className="w-full p-3 border rounded-lg" placeholder="Brief summary of your career..." value={formData.summary} onChange={e => handleChange('summary', null, e.target.value)} />
+                <textarea
+                    rows="4"
+                    className="w-full p-3 border rounded-md text-base"
+                    placeholder="Brief summary of your career..."
+                    value={formData.summary}
+                    onChange={e => handleChange('summary', null, e.target.value)}
+                />
             </div>
         </div>
     );
 
-    // Render Education (with score)
     const renderEducation = () => (
-        <div className="space-y-6 animate-fade-in">
-            <h3 className="text-xl font-bold text-gray-800 flex justify-between">
+        <div className="space-y-5 animate-fade-in">
+            <h3 className="text-xl font-bold text-gray-800 flex justify-between items-center">
                 Education
-                <button onClick={() => addItem('education', { degree: '', institution: '', year: '', score: '' })} className="text-sm bg-indigo-100 text-indigo-700 px-3 py-1 rounded flex items-center gap-1 hover:bg-indigo-200"><Plus size={14} /> Add Education</button>
+                <button
+                    onClick={() => addItem('education', { degree: '', institution: '', year: '', score: '' })}
+                    className="text-sm bg-indigo-100 text-indigo-700 px-4 py-2 rounded flex items-center gap-1 hover:bg-indigo-200"
+                >
+                    <Plus size={16} /> Add Education
+                </button>
             </h3>
             {formData.education.map((edu, index) => (
-                <div key={index} className="p-4 border rounded-lg bg-gray-50 relative group">
-                    <button onClick={() => removeItem('education', index)} className="absolute top-2 right-2 text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 size={18} /></button>
+                <div key={index} className="p-5 border rounded-lg bg-gray-50 relative group">
+                    <button
+                        onClick={() => removeItem('education', index)}
+                        className="absolute top-3 right-3 text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                        <Trash2 size={18} />
+                    </button>
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                         <div>
-                            <input type="text" placeholder="Degree / Major" className={`p-2 border rounded w-full ${errors[`edu_${index}_degree`] ? 'border-red-500' : ''}`} value={edu.degree} onChange={e => handleChange('education', 'degree', e.target.value, index)} />
+                            <input
+                                type="text"
+                                placeholder="Degree / Major"
+                                className={`p-3 border rounded-md w-full text-base ${errors[`edu_${index}_degree`] ? 'border-red-500' : ''}`}
+                                value={edu.degree}
+                                onChange={e => handleChange('education', 'degree', e.target.value, index)}
+                            />
                             {errors[`edu_${index}_degree`] && <p className="text-red-500 text-xs">{errors[`edu_${index}_degree`]}</p>}
                         </div>
                         <div>
-                            <input type="text" placeholder="Institution / University" className={`p-2 border rounded w-full ${errors[`edu_${index}_institution`] ? 'border-red-500' : ''}`} value={edu.institution} onChange={e => handleChange('education', 'institution', e.target.value, index)} />
+                            <input
+                                type="text"
+                                placeholder="Institution / University"
+                                className={`p-3 border rounded-md w-full text-base ${errors[`edu_${index}_institution`] ? 'border-red-500' : ''}`}
+                                value={edu.institution}
+                                onChange={e => handleChange('education', 'institution', e.target.value, index)}
+                            />
                             {errors[`edu_${index}_institution`] && <p className="text-red-500 text-xs">{errors[`edu_${index}_institution`]}</p>}
                         </div>
                         <div>
-                            <input type="text" placeholder="Year" className={`p-2 border rounded w-full ${errors[`edu_${index}_year`] ? 'border-red-500' : ''}`} value={edu.year} onChange={e => handleChange('education', 'year', e.target.value, index)} />
+                            <input
+                                type="text"
+                                placeholder="Year"
+                                className={`p-3 border rounded-md w-full text-base ${errors[`edu_${index}_year`] ? 'border-red-500' : ''}`}
+                                value={edu.year}
+                                onChange={e => handleChange('education', 'year', e.target.value, index)}
+                            />
                             {errors[`edu_${index}_year`] && <p className="text-red-500 text-xs">{errors[`edu_${index}_year`]}</p>}
                         </div>
                         <div>
-                            <input type="text" placeholder="Percentage/CGPA" className="p-2 border rounded w-full" value={edu.score} onChange={e => handleChange('education', 'score', e.target.value, index)} />
+                            <input
+                                type="text"
+                                placeholder="Percentage/CGPA"
+                                className="p-3 border rounded-md w-full text-base"
+                                value={edu.score}
+                                onChange={e => handleChange('education', 'score', e.target.value, index)}
+                            />
                         </div>
                     </div>
                 </div>
@@ -237,33 +313,72 @@ const BuildResume = () => {
         </div>
     );
 
-    // Render Experience
     const renderExperience = () => (
-        <div className="space-y-6 animate-fade-in">
-            <h3 className="text-xl font-bold text-gray-800 flex justify-between">
+        <div className="space-y-5 animate-fade-in">
+            <h3 className="text-xl font-bold text-gray-800 flex justify-between items-center">
                 Experience
-                <button onClick={() => addItem('experiences', { jobTitle: '', company: '', startDate: '', endDate: '', description: '' })} className="text-sm bg-indigo-100 text-indigo-700 px-3 py-1 rounded flex items-center gap-1 hover:bg-indigo-200"><Plus size={14} /> Add Position</button>
+                <button
+                    onClick={() => addItem('experiences', { jobTitle: '', company: '', startDate: '', endDate: '', description: '' })}
+                    className="text-sm bg-indigo-100 text-indigo-700 px-4 py-2 rounded flex items-center gap-1 hover:bg-indigo-200"
+                >
+                    <Plus size={16} /> Add Position
+                </button>
             </h3>
             {formData.experiences.map((exp, index) => (
-                <div key={index} className="p-4 border rounded-lg bg-gray-50 relative group">
-                    <button onClick={() => removeItem('experiences', index)} className="absolute top-2 right-2 text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 size={18} /></button>
+                <div key={index} className="p-5 border rounded-lg bg-gray-50 relative group">
+                    <button
+                        onClick={() => removeItem('experiences', index)}
+                        className="absolute top-3 right-3 text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                        <Trash2 size={18} />
+                    </button>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
                         <div>
-                            <input type="text" placeholder="Job Title" className={`p-2 border rounded w-full ${errors[`exp_${index}_title`] ? 'border-red-500' : ''}`} value={exp.jobTitle} onChange={e => handleChange('experiences', 'jobTitle', e.target.value, index)} />
+                            <input
+                                type="text"
+                                placeholder="Job Title"
+                                className={`p-3 border rounded-md w-full text-base ${errors[`exp_${index}_title`] ? 'border-red-500' : ''}`}
+                                value={exp.jobTitle}
+                                onChange={e => handleChange('experiences', 'jobTitle', e.target.value, index)}
+                            />
                             {errors[`exp_${index}_title`] && <p className="text-red-500 text-xs">{errors[`exp_${index}_title`]}</p>}
                         </div>
                         <div>
-                            <input type="text" placeholder="Company" className={`p-2 border rounded w-full ${errors[`exp_${index}_company`] ? 'border-red-500' : ''}`} value={exp.company} onChange={e => handleChange('experiences', 'company', e.target.value, index)} />
+                            <input
+                                type="text"
+                                placeholder="Company"
+                                className={`p-3 border rounded-md w-full text-base ${errors[`exp_${index}_company`] ? 'border-red-500' : ''}`}
+                                value={exp.company}
+                                onChange={e => handleChange('experiences', 'company', e.target.value, index)}
+                            />
                             {errors[`exp_${index}_company`] && <p className="text-red-500 text-xs">{errors[`exp_${index}_company`]}</p>}
                         </div>
                         <div>
-                            <input type="text" placeholder="Start Date" className={`p-2 border rounded w-full ${errors[`exp_${index}_start`] ? 'border-red-500' : ''}`} value={exp.startDate} onChange={e => handleChange('experiences', 'startDate', e.target.value, index)} />
+                            <input
+                                type="text"
+                                placeholder="Start Date"
+                                className={`p-3 border rounded-md w-full text-base ${errors[`exp_${index}_start`] ? 'border-red-500' : ''}`}
+                                value={exp.startDate}
+                                onChange={e => handleChange('experiences', 'startDate', e.target.value, index)}
+                            />
                             {errors[`exp_${index}_start`] && <p className="text-red-500 text-xs">{errors[`exp_${index}_start`]}</p>}
                         </div>
-                        <input type="text" placeholder="End Date" className="p-2 border rounded w-full" value={exp.endDate} onChange={e => handleChange('experiences', 'endDate', e.target.value, index)} />
+                        <input
+                            type="text"
+                            placeholder="End Date"
+                            className="p-3 border rounded-md w-full text-base"
+                            value={exp.endDate}
+                            onChange={e => handleChange('experiences', 'endDate', e.target.value, index)}
+                        />
                     </div>
                     <div>
-                        <textarea rows="3" placeholder="Description of responsibilities (min 50 chars)..." className={`w-full p-2 border rounded ${errors[`exp_${index}_desc`] ? 'border-red-500' : ''}`} value={exp.description} onChange={e => handleChange('experiences', 'description', e.target.value, index)} />
+                        <textarea
+                            rows="3"
+                            placeholder="Description of responsibilities (min 50 chars)..."
+                            className={`w-full p-3 border rounded-md text-base ${errors[`exp_${index}_desc`] ? 'border-red-500' : ''}`}
+                            value={exp.description}
+                            onChange={e => handleChange('experiences', 'description', e.target.value, index)}
+                        />
                         {errors[`exp_${index}_desc`] && <p className="text-red-500 text-xs">{errors[`exp_${index}_desc`]}</p>}
                     </div>
                 </div>
@@ -271,20 +386,32 @@ const BuildResume = () => {
         </div>
     );
 
-    // Render Skills & Projects
     const renderSkillsAndProjects = () => (
-        <div className="space-y-8 animate-fade-in">
+        <div className="space-y-6 animate-fade-in">
             {/* Skills */}
             <div>
-                <h3 className="text-xl font-bold text-gray-800 mb-4 flex justify-between">
+                <h3 className="text-xl font-bold text-gray-800 mb-4 flex justify-between items-center">
                     Skills
-                    <button onClick={() => addItem('skills', '')} className="text-sm bg-indigo-100 text-indigo-700 px-3 py-1 rounded flex items-center gap-1 hover:bg-indigo-200"><Plus size={14} /> Add Skill</button>
+                    <button
+                        onClick={() => addItem('skills', '')}
+                        className="text-sm bg-indigo-100 text-indigo-700 px-4 py-2 rounded flex items-center gap-1 hover:bg-indigo-200"
+                    >
+                        <Plus size={16} /> Add Skill
+                    </button>
                 </h3>
                 <div className="flex flex-wrap gap-3">
                     {formData.skills.map((skill, index) => (
                         <div key={index} className="flex items-center">
-                            <input type="text" className="p-2 border rounded w-40" value={skill} onChange={e => handleChange('skills', null, e.target.value, index)} placeholder="Skill" />
-                            <button onClick={() => removeItem('skills', index)} className="ml-1 text-red-400 hover:text-red-600"><Trash2 size={16} /></button>
+                            <input
+                                type="text"
+                                className="p-3 border rounded-md w-44 text-base"
+                                value={skill}
+                                onChange={e => handleChange('skills', null, e.target.value, index)}
+                                placeholder="Skill"
+                            />
+                            <button onClick={() => removeItem('skills', index)} className="ml-2 text-red-400 hover:text-red-600">
+                                <Trash2 size={16} />
+                            </button>
                         </div>
                     ))}
                 </div>
@@ -292,67 +419,180 @@ const BuildResume = () => {
 
             {/* Projects */}
             <div>
-                <h3 className="text-xl font-bold text-gray-800 mb-4 flex justify-between">
+                <h3 className="text-xl font-bold text-gray-800 mb-4 flex justify-between items-center">
                     Projects
-                    <button onClick={() => addItem('projects', { title: '', description: '', techStack: [] })} className="text-sm bg-indigo-100 text-indigo-700 px-3 py-1 rounded flex items-center gap-1 hover:bg-indigo-200"><Plus size={14} /> Add Project</button>
+                    <button
+                        onClick={() => addItem('projects', { title: '', description: '', techStack: [] })}
+                        className="text-sm bg-indigo-100 text-indigo-700 px-4 py-2 rounded flex items-center gap-1 hover:bg-indigo-200"
+                    >
+                        <Plus size={16} /> Add Project
+                    </button>
                 </h3>
                 {formData.projects.map((proj, index) => (
-                    <div key={index} className="p-4 border rounded-lg bg-gray-50 relative group mb-3">
-                        <button onClick={() => removeItem('projects', index)} className="absolute top-2 right-2 text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 size={18} /></button>
-                        <input type="text" placeholder="Project Title" className="w-full p-2 border rounded mb-2" value={proj.title} onChange={e => handleChange('projects', 'title', e.target.value, index)} />
-                        <input type="text" placeholder="Tech Stack (comma separated)" className="w-full p-2 border rounded mb-2" defaultValue={proj.techStack.join(', ')} onBlur={e => {
-                            handleChange('projects', 'techStack', e.target.value, index, 'techStack');
-                        }} />
-                        <textarea rows="2" placeholder="Project Description" className="w-full p-2 border rounded" value={proj.description} onChange={e => handleChange('projects', 'description', e.target.value, index)} />
+                    <div key={index} className="p-5 border rounded-lg bg-gray-50 relative group mb-4">
+                        <button
+                            onClick={() => removeItem('projects', index)}
+                            className="absolute top-3 right-3 text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                            <Trash2 size={18} />
+                        </button>
+                        <input
+                            type="text"
+                            placeholder="Project Title"
+                            className="w-full p-3 border rounded-md mb-3 text-base"
+                            value={proj.title}
+                            onChange={e => handleChange('projects', 'title', e.target.value, index)}
+                        />
+                        <input
+                            type="text"
+                            placeholder="Tech Stack (comma separated)"
+                            className="w-full p-3 border rounded-md mb-3 text-base"
+                            defaultValue={proj.techStack.join(', ')}
+                            onBlur={e => {
+                                handleChange('projects', 'techStack', e.target.value, index, 'techStack');
+                            }}
+                        />
+                        <textarea
+                            rows="2"
+                            placeholder="Project Description"
+                            className="w-full p-3 border rounded-md text-base"
+                            value={proj.description}
+                            onChange={e => handleChange('projects', 'description', e.target.value, index)}
+                        />
                     </div>
                 ))}
             </div>
         </div>
     );
 
-    // Render Certifications & Achievements
     const renderCertificationsAndAchievements = () => (
-        <div className="space-y-8 animate-fade-in">
+        <div className="space-y-6 animate-fade-in">
             {/* Certifications */}
             <div>
-                <h3 className="text-xl font-bold text-gray-800 mb-4 flex justify-between">
+                <h3 className="text-xl font-bold text-gray-800 mb-4 flex justify-between items-center">
                     Certifications
-                    <button onClick={() => addItem('certifications', { name: '', issuer: '', issueDate: '', expDate: '', credId: '', url: '', description: '' })} className="text-sm bg-indigo-100 text-indigo-700 px-3 py-1 rounded flex items-center gap-1 hover:bg-indigo-200"><Plus size={14} /> Add Certification</button>
+                    <button
+                        onClick={() => addItem('certifications', { name: '', issuer: '', issueDate: '', expDate: '', credId: '', url: '', description: '' })}
+                        className="text-sm bg-indigo-100 text-indigo-700 px-4 py-2 rounded flex items-center gap-1 hover:bg-indigo-200"
+                    >
+                        <Plus size={16} /> Add Certification
+                    </button>
                 </h3>
                 {formData.certifications.map((cert, index) => (
-                    <div key={index} className="p-4 border rounded-lg bg-gray-50 relative group mb-3">
-                        <button onClick={() => removeItem('certifications', index)} className="absolute top-2 right-2 text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 size={18} /></button>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-2">
-                            <input type="text" placeholder="Certificate Name" className="w-full p-2 border rounded" value={cert.name} onChange={e => handleChange('certifications', 'name', e.target.value, index)} />
-                            <input type="text" placeholder="Issuing Organization" className={`w-full p-2 border rounded ${errors[`cert_${index}_issuer`] ? 'border-red-500' : ''}`} value={cert.issuer} onChange={e => handleChange('certifications', 'issuer', e.target.value, index)} />
-                            <input type="text" placeholder="Issue Date" className="w-full p-2 border rounded" value={cert.issueDate} onChange={e => handleChange('certifications', 'issueDate', e.target.value, index)} />
-                            <input type="text" placeholder="Expiration Date (Optional)" className="w-full p-2 border rounded" value={cert.expDate} onChange={e => handleChange('certifications', 'expDate', e.target.value, index)} />
+                    <div key={index} className="p-5 border rounded-lg bg-gray-50 relative group mb-4">
+                        <button
+                            onClick={() => removeItem('certifications', index)}
+                            className="absolute top-3 right-3 text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                            <Trash2 size={18} />
+                        </button>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                            <input
+                                type="text"
+                                placeholder="Certificate Name"
+                                className="w-full p-3 border rounded-md text-base"
+                                value={cert.name}
+                                onChange={e => handleChange('certifications', 'name', e.target.value, index)}
+                            />
+                            <input
+                                type="text"
+                                placeholder="Issuing Organization"
+                                className={`w-full p-3 border rounded-md text-base ${errors[`cert_${index}_issuer`] ? 'border-red-500' : ''}`}
+                                value={cert.issuer}
+                                onChange={e => handleChange('certifications', 'issuer', e.target.value, index)}
+                            />
+                            <input
+                                type="text"
+                                placeholder="Issue Date"
+                                className="w-full p-3 border rounded-md text-base"
+                                value={cert.issueDate}
+                                onChange={e => handleChange('certifications', 'issueDate', e.target.value, index)}
+                            />
+                            <input
+                                type="text"
+                                placeholder="Expiration Date (Optional)"
+                                className="w-full p-3 border rounded-md text-base"
+                                value={cert.expDate}
+                                onChange={e => handleChange('certifications', 'expDate', e.target.value, index)}
+                            />
                         </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-2">
-                            <input type="text" placeholder="Credential ID (Optional)" className="w-full p-2 border rounded" value={cert.credId} onChange={e => handleChange('certifications', 'credId', e.target.value, index)} />
-                            <input type="text" placeholder="Verification URL (Optional)" className="w-full p-2 border rounded" value={cert.url} onChange={e => handleChange('certifications', 'url', e.target.value, index)} />
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                            <input
+                                type="text"
+                                placeholder="Credential ID (Optional)"
+                                className="w-full p-3 border rounded-md text-base"
+                                value={cert.credId}
+                                onChange={e => handleChange('certifications', 'credId', e.target.value, index)}
+                            />
+                            <input
+                                type="text"
+                                placeholder="Verification URL (Optional)"
+                                className="w-full p-3 border rounded-md text-base"
+                                value={cert.url}
+                                onChange={e => handleChange('certifications', 'url', e.target.value, index)}
+                            />
                         </div>
-                        <textarea rows="2" placeholder="Description / Notes (Optional)" className="w-full p-2 border rounded" value={cert.description} onChange={e => handleChange('certifications', 'description', e.target.value, index)} />
-                        {errors[`cert_${index}_issuer`] && <p className="text-red-500 text-xs">{errors[`cert_${index}_issuer`]}</p>}
+                        <textarea
+                            rows="2"
+                            placeholder="Description / Notes (Optional)"
+                            className="w-full p-3 border rounded-md text-base"
+                            value={cert.description}
+                            onChange={e => handleChange('certifications', 'description', e.target.value, index)}
+                        />
+                        {errors[`cert_${index}_issuer`] && <p className="text-red-500 text-xs mt-1">{errors[`cert_${index}_issuer`]}</p>}
                     </div>
                 ))}
             </div>
 
             {/* Achievements */}
             <div>
-                <h3 className="text-xl font-bold text-gray-800 mb-4 flex justify-between">
+                <h3 className="text-xl font-bold text-gray-800 mb-4 flex justify-between items-center">
                     Achievements
-                    <button onClick={() => addItem('achievements', { title: '', organization: '', date: '', description: '' })} className="text-sm bg-indigo-100 text-indigo-700 px-3 py-1 rounded flex items-center gap-1 hover:bg-indigo-200"><Plus size={14} /> Add Achievement</button>
+                    <button
+                        onClick={() => addItem('achievements', { title: '', organization: '', date: '', description: '' })}
+                        className="text-sm bg-indigo-100 text-indigo-700 px-4 py-2 rounded flex items-center gap-1 hover:bg-indigo-200"
+                    >
+                        <Plus size={16} /> Add Achievement
+                    </button>
                 </h3>
                 {formData.achievements.map((ach, index) => (
-                    <div key={index} className="p-4 border rounded-lg bg-gray-50 relative group mb-3">
-                        <button onClick={() => removeItem('achievements', index)} className="absolute top-2 right-2 text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 size={18} /></button>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-2">
-                            <input type="text" placeholder="Title / Name" className="w-full p-2 border rounded" value={ach.title} onChange={e => handleChange('achievements', 'title', e.target.value, index)} />
-                            <input type="text" placeholder="Organization / Event" className="w-full p-2 border rounded" value={ach.organization} onChange={e => handleChange('achievements', 'organization', e.target.value, index)} />
-                            <input type="text" placeholder="Date" className="w-full p-2 border rounded" value={ach.date} onChange={e => handleChange('achievements', 'date', e.target.value, index)} />
+                    <div key={index} className="p-5 border rounded-lg bg-gray-50 relative group mb-4">
+                        <button
+                            onClick={() => removeItem('achievements', index)}
+                            className="absolute top-3 right-3 text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                            <Trash2 size={18} />
+                        </button>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                            <input
+                                type="text"
+                                placeholder="Title / Name"
+                                className="w-full p-3 border rounded-md text-base"
+                                value={ach.title}
+                                onChange={e => handleChange('achievements', 'title', e.target.value, index)}
+                            />
+                            <input
+                                type="text"
+                                placeholder="Organization / Event"
+                                className="w-full p-3 border rounded-md text-base"
+                                value={ach.organization}
+                                onChange={e => handleChange('achievements', 'organization', e.target.value, index)}
+                            />
+                            <input
+                                type="text"
+                                placeholder="Date"
+                                className="w-full p-3 border rounded-md text-base"
+                                value={ach.date}
+                                onChange={e => handleChange('achievements', 'date', e.target.value, index)}
+                            />
                         </div>
-                        <textarea rows="2" placeholder="Description / Details" className="w-full p-2 border rounded" value={ach.description} onChange={e => handleChange('achievements', 'description', e.target.value, index)} />
+                        <textarea
+                            rows="2"
+                            placeholder="Description / Details"
+                            className="w-full p-3 border rounded-md text-base"
+                            value={ach.description}
+                            onChange={e => handleChange('achievements', 'description', e.target.value, index)}
+                        />
                     </div>
                 ))}
             </div>
@@ -360,69 +600,201 @@ const BuildResume = () => {
     );
 
     const renderAdditionalActivities = () => (
-        <div className="space-y-8 animate-fade-in">
+        <div className="space-y-6 animate-fade-in">
             {/* Extra-Curriculars */}
             <div>
-                <h3 className="text-xl font-bold text-gray-800 mb-4 flex justify-between">
+                <h3 className="text-xl font-bold text-gray-800 mb-4 flex justify-between items-center">
                     Extra-Curricular Activities
-                    <button onClick={() => addItem('activities', { activity: '', role: '', organization: '', startDate: '', endDate: '', description: '' })} className="text-sm bg-indigo-100 text-indigo-700 px-3 py-1 rounded flex items-center gap-1 hover:bg-indigo-200"><Plus size={14} /> Add Activity</button>
+                    <button
+                        onClick={() => addItem('activities', { activity: '', role: '', organization: '', startDate: '', endDate: '', description: '' })}
+                        className="text-sm bg-indigo-100 text-indigo-700 px-4 py-2 rounded flex items-center gap-1 hover:bg-indigo-200"
+                    >
+                        <Plus size={16} /> Add Activity
+                    </button>
                 </h3>
                 {formData.activities.map((act, index) => (
-                    <div key={index} className="p-4 border rounded-lg bg-gray-50 relative group mb-3">
-                        <button onClick={() => removeItem('activities', index)} className="absolute top-2 right-2 text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 size={18} /></button>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-2">
-                            <input type="text" placeholder="Activity Name" className="w-full p-2 border rounded" value={act.activity} onChange={e => handleChange('activities', 'activity', e.target.value, index)} />
-                            <input type="text" placeholder="Role / Position" className="w-full p-2 border rounded" value={act.role} onChange={e => handleChange('activities', 'role', e.target.value, index)} />
-                            <input type="text" placeholder="Organization" className="w-full p-2 border rounded" value={act.organization} onChange={e => handleChange('activities', 'organization', e.target.value, index)} />
+                    <div key={index} className="p-5 border rounded-lg bg-gray-50 relative group mb-4">
+                        <button
+                            onClick={() => removeItem('activities', index)}
+                            className="absolute top-3 right-3 text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                            <Trash2 size={18} />
+                        </button>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                            <input
+                                type="text"
+                                placeholder="Activity Name"
+                                className="w-full p-3 border rounded-md text-base"
+                                value={act.activity}
+                                onChange={e => handleChange('activities', 'activity', e.target.value, index)}
+                            />
+                            <input
+                                type="text"
+                                placeholder="Role / Position"
+                                className="w-full p-3 border rounded-md text-base"
+                                value={act.role}
+                                onChange={e => handleChange('activities', 'role', e.target.value, index)}
+                            />
+                            <input
+                                type="text"
+                                placeholder="Organization"
+                                className="w-full p-3 border rounded-md text-base"
+                                value={act.organization}
+                                onChange={e => handleChange('activities', 'organization', e.target.value, index)}
+                            />
                         </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-2">
-                            <input type="text" placeholder="Start Date" className="w-full p-2 border rounded" value={act.startDate} onChange={e => handleChange('activities', 'startDate', e.target.value, index)} />
-                            <input type="text" placeholder="End Date / Present" className="w-full p-2 border rounded" value={act.endDate} onChange={e => handleChange('activities', 'endDate', e.target.value, index)} />
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                            <input
+                                type="text"
+                                placeholder="Start Date"
+                                className="w-full p-3 border rounded-md text-base"
+                                value={act.startDate}
+                                onChange={e => handleChange('activities', 'startDate', e.target.value, index)}
+                            />
+                            <input
+                                type="text"
+                                placeholder="End Date / Present"
+                                className="w-full p-3 border rounded-md text-base"
+                                value={act.endDate}
+                                onChange={e => handleChange('activities', 'endDate', e.target.value, index)}
+                            />
                         </div>
-                        <textarea rows="2" placeholder="Description / Achievements" className="w-full p-2 border rounded" value={act.description} onChange={e => handleChange('activities', 'description', e.target.value, index)} />
+                        <textarea
+                            rows="2"
+                            placeholder="Description / Achievements"
+                            className="w-full p-3 border rounded-md text-base"
+                            value={act.description}
+                            onChange={e => handleChange('activities', 'description', e.target.value, index)}
+                        />
                     </div>
                 ))}
             </div>
 
             {/* Volunteering */}
             <div>
-                <h3 className="text-xl font-bold text-gray-800 mb-4 flex justify-between">
+                <h3 className="text-xl font-bold text-gray-800 mb-4 flex justify-between items-center">
                     Volunteering / Social Work
-                    <button onClick={() => addItem('volunteering', { role: '', organization: '', startDate: '', endDate: '', description: '' })} className="text-sm bg-indigo-100 text-indigo-700 px-3 py-1 rounded flex items-center gap-1 hover:bg-indigo-200"><Plus size={14} /> Add Work</button>
+                    <button
+                        onClick={() => addItem('volunteering', { role: '', organization: '', startDate: '', endDate: '', description: '' })}
+                        className="text-sm bg-indigo-100 text-indigo-700 px-4 py-2 rounded flex items-center gap-1 hover:bg-indigo-200"
+                    >
+                        <Plus size={16} /> Add Work
+                    </button>
                 </h3>
                 {formData.volunteering.map((vol, index) => (
-                    <div key={index} className="p-4 border rounded-lg bg-gray-50 relative group mb-3">
-                        <button onClick={() => removeItem('volunteering', index)} className="absolute top-2 right-2 text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 size={18} /></button>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-2">
-                            <input type="text" placeholder="Role / Position" className="w-full p-2 border rounded" value={vol.role} onChange={e => handleChange('volunteering', 'role', e.target.value, index)} />
-                            <input type="text" placeholder="Organization" className="w-full p-2 border rounded" value={vol.organization} onChange={e => handleChange('volunteering', 'organization', e.target.value, index)} />
-                            <input type="text" placeholder="Start Date" className="w-full p-2 border rounded" value={vol.startDate} onChange={e => handleChange('volunteering', 'startDate', e.target.value, index)} />
-                            <input type="text" placeholder="End Date / Present" className="w-full p-2 border rounded" value={vol.endDate} onChange={e => handleChange('volunteering', 'endDate', e.target.value, index)} />
+                    <div key={index} className="p-5 border rounded-lg bg-gray-50 relative group mb-4">
+                        <button
+                            onClick={() => removeItem('volunteering', index)}
+                            className="absolute top-3 right-3 text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                            <Trash2 size={18} />
+                        </button>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                            <input
+                                type="text"
+                                placeholder="Role / Position"
+                                className="w-full p-3 border rounded-md text-base"
+                                value={vol.role}
+                                onChange={e => handleChange('volunteering', 'role', e.target.value, index)}
+                            />
+                            <input
+                                type="text"
+                                placeholder="Organization"
+                                className="w-full p-3 border rounded-md text-base"
+                                value={vol.organization}
+                                onChange={e => handleChange('volunteering', 'organization', e.target.value, index)}
+                            />
+                            <input
+                                type="text"
+                                placeholder="Start Date"
+                                className="w-full p-3 border rounded-md text-base"
+                                value={vol.startDate}
+                                onChange={e => handleChange('volunteering', 'startDate', e.target.value, index)}
+                            />
+                            <input
+                                type="text"
+                                placeholder="End Date / Present"
+                                className="w-full p-3 border rounded-md text-base"
+                                value={vol.endDate}
+                                onChange={e => handleChange('volunteering', 'endDate', e.target.value, index)}
+                            />
                         </div>
-                        <textarea rows="2" placeholder="Description / Highlights" className="w-full p-2 border rounded" value={vol.description} onChange={e => handleChange('volunteering', 'description', e.target.value, index)} />
+                        <textarea
+                            rows="2"
+                            placeholder="Description / Highlights"
+                            className="w-full p-3 border rounded-md text-base"
+                            value={vol.description}
+                            onChange={e => handleChange('volunteering', 'description', e.target.value, index)}
+                        />
                     </div>
                 ))}
             </div>
 
             {/* Workshops */}
             <div>
-                <h3 className="text-xl font-bold text-gray-800 mb-4 flex justify-between">
+                <h3 className="text-xl font-bold text-gray-800 mb-4 flex justify-between items-center">
                     Workshops / Internships
-                    <button onClick={() => addItem('workshops', { title: '', organization: '', startDate: '', endDate: '', role: '', description: '' })} className="text-sm bg-indigo-100 text-indigo-700 px-3 py-1 rounded flex items-center gap-1 hover:bg-indigo-200"><Plus size={14} /> Add Entry</button>
+                    <button
+                        onClick={() => addItem('workshops', { title: '', organization: '', startDate: '', endDate: '', role: '', description: '' })}
+                        className="text-sm bg-indigo-100 text-indigo-700 px-4 py-2 rounded flex items-center gap-1 hover:bg-indigo-200"
+                    >
+                        <Plus size={16} /> Add Entry
+                    </button>
                 </h3>
                 {formData.workshops.map((work, index) => (
-                    <div key={index} className="p-4 border rounded-lg bg-gray-50 relative group mb-3">
-                        <button onClick={() => removeItem('workshops', index)} className="absolute top-2 right-2 text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 size={18} /></button>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-2">
-                            <input type="text" placeholder="Title / Topic" className="w-full p-2 border rounded" value={work.title} onChange={e => handleChange('workshops', 'title', e.target.value, index)} />
-                            <input type="text" placeholder="Organization / Company" className="w-full p-2 border rounded" value={work.organization} onChange={e => handleChange('workshops', 'organization', e.target.value, index)} />
+                    <div key={index} className="p-5 border rounded-lg bg-gray-50 relative group mb-4">
+                        <button
+                            onClick={() => removeItem('workshops', index)}
+                            className="absolute top-3 right-3 text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                            <Trash2 size={18} />
+                        </button>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                            <input
+                                type="text"
+                                placeholder="Title / Topic"
+                                className="w-full p-3 border rounded-md text-base"
+                                value={work.title}
+                                onChange={e => handleChange('workshops', 'title', e.target.value, index)}
+                            />
+                            <input
+                                type="text"
+                                placeholder="Organization / Company"
+                                className="w-full p-3 border rounded-md text-base"
+                                value={work.organization}
+                                onChange={e => handleChange('workshops', 'organization', e.target.value, index)}
+                            />
                         </div>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-2">
-                            <input type="text" placeholder="Start Date" className="w-full p-2 border rounded" value={work.startDate} onChange={e => handleChange('workshops', 'startDate', e.target.value, index)} />
-                            <input type="text" placeholder="End Date" className="w-full p-2 border rounded" value={work.endDate} onChange={e => handleChange('workshops', 'endDate', e.target.value, index)} />
-                            <input type="text" placeholder="Role / Position" className="w-full p-2 border rounded" value={work.role} onChange={e => handleChange('workshops', 'role', e.target.value, index)} />
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-3">
+                            <input
+                                type="text"
+                                placeholder="Start Date"
+                                className="w-full p-3 border rounded-md text-base"
+                                value={work.startDate}
+                                onChange={e => handleChange('workshops', 'startDate', e.target.value, index)}
+                            />
+                            <input
+                                type="text"
+                                placeholder="End Date"
+                                className="w-full p-3 border rounded-md text-base"
+                                value={work.endDate}
+                                onChange={e => handleChange('workshops', 'endDate', e.target.value, index)}
+                            />
+                            <input
+                                type="text"
+                                placeholder="Role / Position"
+                                className="w-full p-3 border rounded-md text-base"
+                                value={work.role}
+                                onChange={e => handleChange('workshops', 'role', e.target.value, index)}
+                            />
                         </div>
-                        <textarea rows="2" placeholder="Key Learnings" className="w-full p-2 border rounded" value={work.description} onChange={e => handleChange('workshops', 'description', e.target.value, index)} />
+                        <textarea
+                            rows="2"
+                            placeholder="Key Learnings"
+                            className="w-full p-3 border rounded-md text-base"
+                            value={work.description}
+                            onChange={e => handleChange('workshops', 'description', e.target.value, index)}
+                        />
                     </div>
                 ))}
             </div>
@@ -430,21 +802,21 @@ const BuildResume = () => {
     );
 
     const renderReferences = () => (
-        <div className="space-y-6 animate-fade-in">
-            <h3 className="text-xl font-bold text-gray-800 flex justify-between">
+        <div className="space-y-5 animate-fade-in">
+            <h3 className="text-xl font-bold text-gray-800 flex justify-between items-center">
                 References
                 <button
                     onClick={() => addItem('references', { name: '', jobTitle: '', company: '', email: '', phone: '', relationship: '' })}
-                    className="text-sm bg-indigo-100 text-indigo-700 px-3 py-1 rounded flex items-center gap-1 hover:bg-indigo-200"
+                    className="text-sm bg-indigo-100 text-indigo-700 px-4 py-2 rounded flex items-center gap-1 hover:bg-indigo-200"
                 >
-                    <Plus size={14} /> Add Reference
+                    <Plus size={16} /> Add Reference
                 </button>
             </h3>
             {formData.references.map((ref, index) => (
-                <div key={index} className="p-4 border rounded-lg bg-gray-50 relative group">
+                <div key={index} className="p-5 border rounded-lg bg-gray-50 relative group">
                     <button
                         onClick={() => removeItem('references', index)}
-                        className="absolute top-2 right-2 text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition-opacity"
+                        className="absolute top-3 right-3 text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition-opacity"
                     >
                         <Trash2 size={18} />
                     </button>
@@ -452,42 +824,42 @@ const BuildResume = () => {
                         <input
                             type="text"
                             placeholder="Full Name *"
-                            className="p-2 border rounded w-full"
+                            className="p-3 border rounded-md w-full text-base"
                             value={ref.name}
                             onChange={e => handleChange('references', 'name', e.target.value, index)}
                         />
                         <input
                             type="text"
                             placeholder="Job Title"
-                            className="p-2 border rounded w-full"
+                            className="p-3 border rounded-md w-full text-base"
                             value={ref.jobTitle}
                             onChange={e => handleChange('references', 'jobTitle', e.target.value, index)}
                         />
                         <input
                             type="text"
                             placeholder="Company"
-                            className="p-2 border rounded w-full"
+                            className="p-3 border rounded-md w-full text-base"
                             value={ref.company}
                             onChange={e => handleChange('references', 'company', e.target.value, index)}
                         />
                         <input
                             type="email"
                             placeholder="Email"
-                            className="p-2 border rounded w-full"
+                            className="p-3 border rounded-md w-full text-base"
                             value={ref.email}
                             onChange={e => handleChange('references', 'email', e.target.value, index)}
                         />
                         <input
                             type="text"
                             placeholder="Phone"
-                            className="p-2 border rounded w-full"
+                            className="p-3 border rounded-md w-full text-base"
                             value={ref.phone}
                             onChange={e => handleChange('references', 'phone', e.target.value, index)}
                         />
                         <input
                             type="text"
                             placeholder="Relationship (e.g., Manager, Colleague)"
-                            className="p-2 border rounded w-full"
+                            className="p-3 border rounded-md w-full text-base"
                             value={ref.relationship}
                             onChange={e => handleChange('references', 'relationship', e.target.value, index)}
                         />
@@ -501,7 +873,6 @@ const BuildResume = () => {
     );
 
     const renderPreview = () => {
-
         const nonEmptyExperiences = formData.experiences.filter(exp => 
             exp.jobTitle?.trim() || exp.company?.trim() || exp.startDate?.trim() || exp.endDate?.trim() || exp.description?.trim()
         );
@@ -535,8 +906,8 @@ const BuildResume = () => {
         const renderReferencesSection = () => {
             if (nonEmptyReferences.length === 0) return null;
             return (
-                <div className="mt-6">
-                    <h2 className="text-lg font-bold uppercase text-gray-700 mb-3">References</h2>
+                <div className="mt-5">
+                    <h2 className="text-sm font-bold uppercase text-gray-700 mb-3">References</h2>
                     {nonEmptyReferences.map((ref, i) => (
                         <div key={i} className="mb-3 text-sm">
                             <div className="font-bold">{ref.name}</div>
@@ -555,7 +926,7 @@ const BuildResume = () => {
         return (
             <div className="animate-fade-in">
                 {/* Controls */}
-                <div className="mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200 flex flex-wrap gap-6">
+                <div className="mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200 flex flex-wrap gap-5">
                     <div className="flex items-center gap-3">
                         <label className="text-sm font-medium text-gray-700">Font Size:</label>
                         <input
@@ -565,7 +936,7 @@ const BuildResume = () => {
                             step="1"
                             value={previewFontSize}
                             onChange={(e) => setPreviewFontSize(Number(e.target.value))}
-                            className="w-32"
+                            className="w-28"
                         />
                         <span className="text-sm text-gray-600 w-8">{previewFontSize}px</span>
                     </div>
@@ -578,17 +949,17 @@ const BuildResume = () => {
                             step="0.1"
                             value={previewLineHeight}
                             onChange={(e) => setPreviewLineHeight(Number(e.target.value))}
-                            className="w-32"
+                            className="w-28"
                         />
                         <span className="text-sm text-gray-600 w-8">{previewLineHeight.toFixed(1)}</span>
                     </div>
                 </div>
 
                 {/* Preview container */}
-                <div className="h-[600px] overflow-y-auto border-4 border-gray-300 rounded-lg p-2 bg-gray-100">
+                <div className="h-[550px] overflow-y-auto border-2 border-dashed border-gray-300 rounded-lg p-2 bg-gray-100">
                     <div
                         ref={resumeRef}
-                        className="preview-content bg-white min-h-full p-10 shadow-lg origin-top scale-95"
+                        className="preview-content bg-white min-h-full p-8 shadow-sm"
                         style={{
                             fontSize: `${previewFontSize}px`,
                             lineHeight: previewLineHeight,
@@ -615,70 +986,70 @@ const BuildResume = () => {
                                 case 2: // Modern Tech
                                     return (
                                         <div className="font-sans text-gray-800">
-                                            <div className="bg-slate-800 text-white p-6 rounded-t-lg">
-                                                <h1 className="text-4xl font-bold mb-1">{personalInfo.fullName}</h1>
-                                                {personalInfo.title && <p className="text-lg text-slate-300 mb-3">{personalInfo.title}</p>}
-                                                <div className="flex flex-wrap gap-4 text-sm text-slate-300">
+                                            <div className="bg-slate-800 text-white p-5 rounded-t-lg">
+                                                <h1 className="text-2xl font-bold mb-1">{personalInfo.fullName}</h1>
+                                                {personalInfo.title && <p className="text-sm text-slate-300 mb-2">{personalInfo.title}</p>}
+                                                <div className="flex flex-wrap gap-3 text-xs text-slate-300">
                                                     <span>{personalInfo.email}</span>
                                                     <span>{personalInfo.phone}</span>
                                                     <span>{personalInfo.linkedin}</span>
                                                 </div>
                                             </div>
-                                            <div className="p-6">
-                                                {summary && <div className="mb-6"><h3 className="text-xl font-bold border-b-2 border-slate-800 mb-2">Summary</h3><p>{summary}</p></div>}
+                                            <div className="p-5">
+                                                {summary && <div className="mb-5"><h3 className="text-lg font-bold border-b-2 border-slate-800 mb-2">Summary</h3><p className="text-sm">{summary}</p></div>}
                                                 {nonEmptyExperiences.length > 0 && (
-                                                    <div className="mb-6"><h3 className="text-xl font-bold border-b-2 border-slate-800 mb-2">Experience</h3>
+                                                    <div className="mb-5"><h3 className="text-lg font-bold border-b-2 border-slate-800 mb-2">Experience</h3>
                                                         {nonEmptyExperiences.map((exp, i) => (
                                                             <div key={i} className="mb-4">
-                                                                <div className="flex justify-between font-bold"><span>{exp.jobTitle}</span><span>{exp.startDate} - {exp.endDate}</span></div>
-                                                                <div className="text-slate-600 mb-1">{exp.company}</div>
-                                                                <p className="text-sm">{exp.description}</p>
+                                                                <div className="flex justify-between font-bold text-sm"><span>{exp.jobTitle}</span><span>{exp.startDate} - {exp.endDate}</span></div>
+                                                                <div className="text-xs text-slate-600 mb-1">{exp.company}</div>
+                                                                <p className="text-xs">{exp.description}</p>
                                                             </div>
                                                         ))}
                                                     </div>
                                                 )}
                                                 {nonEmptyProjects.length > 0 && (
-                                                    <div className="mb-6"><h3 className="text-xl font-bold border-b-2 border-slate-800 mb-2">Projects</h3>
+                                                    <div className="mb-5"><h3 className="text-lg font-bold border-b-2 border-slate-800 mb-2">Projects</h3>
                                                         {nonEmptyProjects.map((proj, i) => (
-                                                            <div key={i} className="mb-4">
-                                                                <h4 className="font-bold">{proj.title}</h4>
+                                                            <div key={i} className="mb-3">
+                                                                <h4 className="font-bold text-sm">{proj.title}</h4>
                                                                 {proj.techStack && proj.techStack.length > 0 && <div className="text-xs text-slate-500 mb-1">Tech: {getTech(proj.techStack)}</div>}
-                                                                <p className="text-sm">{proj.description}</p>
+                                                                <p className="text-xs">{proj.description}</p>
                                                             </div>
                                                         ))}
                                                     </div>
                                                 )}
                                                 {nonEmptyEducation.length > 0 && (
-                                                    <div className="mb-6"><h3 className="text-xl font-bold border-b-2 border-slate-800 mb-2">Education</h3>
+                                                    <div className="mb-5"><h3 className="text-lg font-bold border-b-2 border-slate-800 mb-2">Education</h3>
                                                         {nonEmptyEducation.map((edu, i) => (
-                                                            <div key={i} className="flex justify-between">
+                                                            <div key={i} className="flex justify-between text-sm">
                                                                 <div>
                                                                     <div className="font-bold">{edu.institution}</div>
                                                                     <div>{edu.degree}</div>
                                                                     {edu.score && <div className="text-xs text-slate-500">Score: {edu.score}</div>}
                                                                 </div>
-                                                                <div className="text-sm text-gray-500">{edu.year}</div>
+                                                                <div className="text-xs text-gray-500">{edu.year}</div>
                                                             </div>
                                                         ))}
                                                     </div>
                                                 )}
                                                 {skills.some(s => s.trim()) && (
-                                                    <div><h3 className="text-xl font-bold border-b-2 border-slate-800 mb-2">Skills</h3>
+                                                    <div><h3 className="text-lg font-bold border-b-2 border-slate-800 mb-2">Skills</h3>
                                                         <div className="flex flex-wrap gap-2">
                                                             {skills.filter(s => s.trim()).map((s, i) => (
-                                                                <span key={i} className="bg-slate-100 px-3 py-1 rounded-full text-sm font-semibold text-slate-700">{s}</span>
+                                                                <span key={i} className="bg-slate-100 px-3 py-1 rounded-full text-xs font-semibold text-slate-700">{s}</span>
                                                             ))}
                                                         </div>
                                                     </div>
                                                 )}
 
                                                 {nonEmptyCertifications.length > 0 && (
-                                                    <div className="mt-6">
-                                                        <h3 className="text-xl font-bold border-b-2 border-slate-800 mb-2">Certifications</h3>
+                                                    <div className="mt-5">
+                                                        <h3 className="text-lg font-bold border-b-2 border-slate-800 mb-2">Certifications</h3>
                                                         {nonEmptyCertifications.map((cert, i) => (
                                                             <div key={i} className="mb-3">
-                                                                <div className="font-bold">{cert.name}</div>
-                                                                <div className="text-sm text-slate-600">{cert.issuer}{cert.issueDate && ` · ${cert.issueDate}`}</div>
+                                                                <div className="font-bold text-sm">{cert.name}</div>
+                                                                <div className="text-xs text-slate-600">{cert.issuer}{cert.issueDate && ` · ${cert.issueDate}`}</div>
                                                                 {cert.description && <p className="text-xs text-slate-500 mt-1">{cert.description}</p>}
                                                                 {cert.url && <a href={cert.url} target="_blank" rel="noreferrer" className="text-xs text-blue-500 hover:underline">Verify</a>}
                                                             </div>
@@ -687,55 +1058,55 @@ const BuildResume = () => {
                                                 )}
 
                                                 {nonEmptyAchievements.length > 0 && (
-                                                    <div className="mt-6">
-                                                        <h3 className="text-xl font-bold border-b-2 border-slate-800 mb-2">Achievements</h3>
+                                                    <div className="mt-5">
+                                                        <h3 className="text-lg font-bold border-b-2 border-slate-800 mb-2">Achievements</h3>
                                                         {nonEmptyAchievements.map((ach, i) => (
                                                             <div key={i} className="mb-3">
-                                                                <div className="font-bold">{ach.title}</div>
-                                                                <div className="text-sm text-slate-600">{ach.organization}{ach.date && ` · ${ach.date}`}</div>
-                                                                <p className="text-sm mt-1">{ach.description}</p>
+                                                                <div className="font-bold text-sm">{ach.title}</div>
+                                                                <div className="text-xs text-slate-600">{ach.organization}{ach.date && ` · ${ach.date}`}</div>
+                                                                <p className="text-xs mt-1">{ach.description}</p>
                                                             </div>
                                                         ))}
                                                     </div>
                                                 )}
 
                                                 {nonEmptyActivities.length > 0 && (
-                                                    <div className="mt-6">
-                                                        <h3 className="text-xl font-bold border-b-2 border-slate-800 mb-2">Activities</h3>
+                                                    <div className="mt-5">
+                                                        <h3 className="text-lg font-bold border-b-2 border-slate-800 mb-2">Activities</h3>
                                                         {nonEmptyActivities.map((act, i) => (
                                                             <div key={i} className="mb-3">
-                                                                <div className="font-bold">{act.activity}</div>
-                                                                <div className="text-sm text-slate-600">{act.role}{act.organization && `, ${act.organization}`}</div>
+                                                                <div className="font-bold text-sm">{act.activity}</div>
+                                                                <div className="text-xs text-slate-600">{act.role}{act.organization && `, ${act.organization}`}</div>
                                                                 <div className="text-xs text-slate-500">{act.startDate} - {act.endDate}</div>
-                                                                <p className="text-sm mt-1">{act.description}</p>
+                                                                <p className="text-xs mt-1">{act.description}</p>
                                                             </div>
                                                         ))}
                                                     </div>
                                                 )}
 
                                                 {nonEmptyVolunteering.length > 0 && (
-                                                    <div className="mt-6">
-                                                        <h3 className="text-xl font-bold border-b-2 border-slate-800 mb-2">Volunteering</h3>
+                                                    <div className="mt-5">
+                                                        <h3 className="text-lg font-bold border-b-2 border-slate-800 mb-2">Volunteering</h3>
                                                         {nonEmptyVolunteering.map((vol, i) => (
                                                             <div key={i} className="mb-3">
-                                                                <div className="font-bold">{vol.role}</div>
-                                                                <div className="text-sm text-slate-600">{vol.organization}</div>
+                                                                <div className="font-bold text-sm">{vol.role}</div>
+                                                                <div className="text-xs text-slate-600">{vol.organization}</div>
                                                                 <div className="text-xs text-slate-500">{vol.startDate} - {vol.endDate}</div>
-                                                                <p className="text-sm mt-1">{vol.description}</p>
+                                                                <p className="text-xs mt-1">{vol.description}</p>
                                                             </div>
                                                         ))}
                                                     </div>
                                                 )}
 
                                                 {nonEmptyWorkshops.length > 0 && (
-                                                    <div className="mt-6">
-                                                        <h3 className="text-xl font-bold border-b-2 border-slate-800 mb-2">Workshops & Trainings</h3>
+                                                    <div className="mt-5">
+                                                        <h3 className="text-lg font-bold border-b-2 border-slate-800 mb-2">Workshops & Trainings</h3>
                                                         {nonEmptyWorkshops.map((ws, i) => (
                                                             <div key={i} className="mb-3">
-                                                                <div className="font-bold">{ws.title}</div>
-                                                                <div className="text-sm text-slate-600">{ws.role}{ws.organization && `, ${ws.organization}`}</div>
+                                                                <div className="font-bold text-sm">{ws.title}</div>
+                                                                <div className="text-xs text-slate-600">{ws.role}{ws.organization && `, ${ws.organization}`}</div>
                                                                 <div className="text-xs text-slate-500">{ws.startDate} - {ws.endDate}</div>
-                                                                <p className="text-sm mt-1">{ws.description}</p>
+                                                                <p className="text-xs mt-1">{ws.description}</p>
                                                             </div>
                                                         ))}
                                                     </div>
@@ -748,44 +1119,44 @@ const BuildResume = () => {
                                 case 3: // Minimalist
                                     return (
                                         <div className="font-serif text-gray-900 max-w-3xl mx-auto">
-                                            <div className="text-center border-b-2 border-gray-900 pb-6 mb-6">
-                                                <h1 className="text-3xl uppercase tracking-widest mb-2">{personalInfo.fullName}</h1>
-                                                {personalInfo.title && <p className="text-lg text-gray-700 mb-3">{personalInfo.title}</p>}
-                                                <p className="text-sm text-gray-600">{personalInfo.email} | {personalInfo.phone}</p>
-                                                <p className="text-sm text-blue-800">{personalInfo.linkedin}</p>
+                                            <div className="text-center border-b-2 border-gray-900 pb-5 mb-5">
+                                                <h1 className="text-2xl uppercase tracking-widest mb-1">{personalInfo.fullName}</h1>
+                                                {personalInfo.title && <p className="text-sm text-gray-700 mb-2">{personalInfo.title}</p>}
+                                                <p className="text-xs text-gray-600">{personalInfo.email} | {personalInfo.phone}</p>
+                                                <p className="text-xs text-blue-800">{personalInfo.linkedin}</p>
                                             </div>
-                                            {summary && <div className="mb-8"><p className="text-center italic text-lg">{summary}</p></div>}
+                                            {summary && <div className="mb-6"><p className="text-center italic text-sm">{summary}</p></div>}
                                             {nonEmptyExperiences.length > 0 && (
-                                                <div className="mb-8"><h2 className="text-sm font-bold uppercase tracking-widest border-b border-gray-300 mb-4 text-gray-500">Experience</h2>
+                                                <div className="mb-6"><h2 className="text-xs font-bold uppercase tracking-widest border-b border-gray-300 mb-3 text-gray-500">Experience</h2>
                                                     {nonEmptyExperiences.map((exp, i) => (
-                                                        <div key={i} className="mb-6">
-                                                            <div className="flex justify-between items-baseline mb-1"><h3 className="font-bold text-lg">{exp.company}</h3><span className="text-sm italic">{exp.startDate} - {exp.endDate}</span></div>
-                                                            <div className="text-sm font-semibold mb-2">{exp.jobTitle}</div>
-                                                            <p className="text-sm leading-relaxed">{exp.description}</p>
+                                                        <div key={i} className="mb-4">
+                                                            <div className="flex justify-between items-baseline mb-1"><h3 className="font-bold text-sm">{exp.company}</h3><span className="text-xs italic">{exp.startDate} - {exp.endDate}</span></div>
+                                                            <div className="text-xs font-semibold mb-1">{exp.jobTitle}</div>
+                                                            <p className="text-xs leading-relaxed">{exp.description}</p>
                                                         </div>
                                                     ))}
                                                 </div>
                                             )}
                                             {nonEmptyProjects.length > 0 && (
-                                                <div className="mb-8"><h2 className="text-sm font-bold uppercase tracking-widest border-b border-gray-300 mb-4 text-gray-500">Projects</h2>
+                                                <div className="mb-6"><h2 className="text-xs font-bold uppercase tracking-widest border-b border-gray-300 mb-3 text-gray-500">Projects</h2>
                                                     {nonEmptyProjects.map((proj, i) => (
-                                                        <div key={i} className="mb-4">
-                                                            <h3 className="font-bold">{proj.title}</h3>
+                                                        <div key={i} className="mb-3">
+                                                            <h3 className="font-bold text-sm">{proj.title}</h3>
                                                             {proj.techStack && proj.techStack.length > 0 && <div className="text-xs italic text-gray-500 mb-1">{getTech(proj.techStack)}</div>}
-                                                            <p className="text-sm leading-relaxed">{proj.description}</p>
+                                                            <p className="text-xs leading-relaxed">{proj.description}</p>
                                                         </div>
                                                     ))}
                                                 </div>
                                             )}
                                             {nonEmptyEducation.length > 0 && (
-                                                <div className="mb-8"><h2 className="text-sm font-bold uppercase tracking-widest border-b border-gray-300 mb-4 text-gray-500">Education</h2>
+                                                <div className="mb-6"><h2 className="text-xs font-bold uppercase tracking-widest border-b border-gray-300 mb-3 text-gray-500">Education</h2>
                                                     {nonEmptyEducation.map((edu, i) => (
                                                         <div key={i} className="flex justify-between items-baseline mb-2">
-                                                            <h3 className="font-bold">{edu.institution}</h3>
-                                                            <span className="text-sm">{edu.year}</span>
-                                                            <div className="flex-1 ml-4 text-right italic">
+                                                            <h3 className="font-bold text-sm">{edu.institution}</h3>
+                                                            <span className="text-xs">{edu.year}</span>
+                                                            <div className="flex-1 ml-3 text-right italic text-xs">
                                                                 {edu.degree}
-                                                                {edu.score && <span className="block text-xs text-gray-400">Score: {edu.score}</span>}
+                                                                {edu.score && <span className="block text-gray-400">Score: {edu.score}</span>}
                                                             </div>
                                                         </div>
                                                     ))}
@@ -793,12 +1164,12 @@ const BuildResume = () => {
                                             )}
 
                                             {nonEmptyCertifications.length > 0 && (
-                                                <div className="mb-8">
-                                                    <h2 className="text-sm font-bold uppercase tracking-widest border-b border-gray-300 mb-4 text-gray-500">Certifications</h2>
+                                                <div className="mb-6">
+                                                    <h2 className="text-xs font-bold uppercase tracking-widest border-b border-gray-300 mb-3 text-gray-500">Certifications</h2>
                                                     {nonEmptyCertifications.map((cert, i) => (
                                                         <div key={i} className="mb-3">
-                                                            <div className="font-bold">{cert.name}</div>
-                                                            <div className="text-sm text-gray-600">{cert.issuer}{cert.issueDate && ` · ${cert.issueDate}`}</div>
+                                                            <div className="font-bold text-sm">{cert.name}</div>
+                                                            <div className="text-xs text-gray-600">{cert.issuer}{cert.issueDate && ` · ${cert.issueDate}`}</div>
                                                             {cert.description && <p className="text-xs text-gray-500 mt-1">{cert.description}</p>}
                                                         </div>
                                                     ))}
@@ -806,55 +1177,55 @@ const BuildResume = () => {
                                             )}
 
                                             {nonEmptyAchievements.length > 0 && (
-                                                <div className="mb-8">
-                                                    <h2 className="text-sm font-bold uppercase tracking-widest border-b border-gray-300 mb-4 text-gray-500">Achievements</h2>
+                                                <div className="mb-6">
+                                                    <h2 className="text-xs font-bold uppercase tracking-widest border-b border-gray-300 mb-3 text-gray-500">Achievements</h2>
                                                     {nonEmptyAchievements.map((ach, i) => (
                                                         <div key={i} className="mb-3">
-                                                            <div className="font-bold">{ach.title}</div>
-                                                            <div className="text-sm text-gray-600">{ach.organization}{ach.date && ` · ${ach.date}`}</div>
-                                                            <p className="text-sm">{ach.description}</p>
+                                                            <div className="font-bold text-sm">{ach.title}</div>
+                                                            <div className="text-xs text-gray-600">{ach.organization}{ach.date && ` · ${ach.date}`}</div>
+                                                            <p className="text-xs">{ach.description}</p>
                                                         </div>
                                                     ))}
                                                 </div>
                                             )}
 
                                             {nonEmptyActivities.length > 0 && (
-                                                <div className="mb-8">
-                                                    <h2 className="text-sm font-bold uppercase tracking-widest border-b border-gray-300 mb-4 text-gray-500">Activities</h2>
+                                                <div className="mb-6">
+                                                    <h2 className="text-xs font-bold uppercase tracking-widest border-b border-gray-300 mb-3 text-gray-500">Activities</h2>
                                                     {nonEmptyActivities.map((act, i) => (
                                                         <div key={i} className="mb-3">
-                                                            <div className="font-bold">{act.activity}</div>
-                                                            <div className="text-sm text-gray-600">{act.role}{act.organization && `, ${act.organization}`}</div>
+                                                            <div className="font-bold text-sm">{act.activity}</div>
+                                                            <div className="text-xs text-gray-600">{act.role}{act.organization && `, ${act.organization}`}</div>
                                                             <div className="text-xs text-gray-400">{act.startDate} - {act.endDate}</div>
-                                                            <p className="text-sm">{act.description}</p>
+                                                            <p className="text-xs">{act.description}</p>
                                                         </div>
                                                     ))}
                                                 </div>
                                             )}
 
                                             {nonEmptyVolunteering.length > 0 && (
-                                                <div className="mb-8">
-                                                    <h2 className="text-sm font-bold uppercase tracking-widest border-b border-gray-300 mb-4 text-gray-500">Volunteering</h2>
+                                                <div className="mb-6">
+                                                    <h2 className="text-xs font-bold uppercase tracking-widest border-b border-gray-300 mb-3 text-gray-500">Volunteering</h2>
                                                     {nonEmptyVolunteering.map((vol, i) => (
                                                         <div key={i} className="mb-3">
-                                                            <div className="font-bold">{vol.role}</div>
-                                                            <div className="text-sm text-gray-600">{vol.organization}</div>
+                                                            <div className="font-bold text-sm">{vol.role}</div>
+                                                            <div className="text-xs text-gray-600">{vol.organization}</div>
                                                             <div className="text-xs text-gray-400">{vol.startDate} - {vol.endDate}</div>
-                                                            <p className="text-sm">{vol.description}</p>
+                                                            <p className="text-xs">{vol.description}</p>
                                                         </div>
                                                     ))}
                                                 </div>
                                             )}
 
                                             {nonEmptyWorkshops.length > 0 && (
-                                                <div className="mb-8">
-                                                    <h2 className="text-sm font-bold uppercase tracking-widest border-b border-gray-300 mb-4 text-gray-500">Workshops & Trainings</h2>
+                                                <div className="mb-6">
+                                                    <h2 className="text-xs font-bold uppercase tracking-widest border-b border-gray-300 mb-3 text-gray-500">Workshops & Trainings</h2>
                                                     {nonEmptyWorkshops.map((ws, i) => (
                                                         <div key={i} className="mb-3">
-                                                            <div className="font-bold">{ws.title}</div>
-                                                            <div className="text-sm text-gray-600">{ws.role}{ws.organization && `, ${ws.organization}`}</div>
+                                                            <div className="font-bold text-sm">{ws.title}</div>
+                                                            <div className="text-xs text-gray-600">{ws.role}{ws.organization && `, ${ws.organization}`}</div>
                                                             <div className="text-xs text-gray-400">{ws.startDate} - {ws.endDate}</div>
-                                                            <p className="text-sm">{ws.description}</p>
+                                                            <p className="text-xs">{ws.description}</p>
                                                         </div>
                                                     ))}
                                                 </div>
@@ -865,28 +1236,28 @@ const BuildResume = () => {
                                     );
                                 case 4: // Creative
                                     return (
-                                        <div className="font-sans flex h-full min-h-[800px]">
-                                            <div className="w-1/3 bg-gray-900 text-white p-6">
-                                                <h1 className="text-2xl font-bold mb-2 break-words">{personalInfo.fullName}</h1>
-                                                {personalInfo.title && <p className="text-sm text-gray-300 mb-6">{personalInfo.title}</p>}
-                                                <div className="mb-8 text-sm space-y-2 opacity-80">
+                                        <div className="font-sans flex h-full min-h-[650px]">
+                                            <div className="w-1/3 bg-gray-900 text-white p-5">
+                                                <h1 className="text-xl font-bold mb-1 break-words">{personalInfo.fullName}</h1>
+                                                {personalInfo.title && <p className="text-xs text-gray-300 mb-4">{personalInfo.title}</p>}
+                                                <div className="mb-5 text-xs space-y-1 opacity-80">
                                                     <p>{personalInfo.email}</p>
                                                     <p>{personalInfo.phone}</p>
                                                     <p>{personalInfo.linkedin}</p>
                                                 </div>
-                                                <div className="mb-8">
-                                                    <h3 className="text-lg font-bold border-b border-gray-700 pb-2 mb-4">Skills</h3>
-                                                    <div className="flex flex-wrap gap-2">
+                                                <div className="mb-5">
+                                                    <h3 className="text-sm font-bold border-b border-gray-700 pb-1 mb-3">Skills</h3>
+                                                    <div className="flex flex-wrap gap-1">
                                                         {skills.filter(s => s.trim()).map(s => (
-                                                            <span className="bg-gray-800 px-2 py-1 text-xs rounded" key={s}>{s}</span>
+                                                            <span className="bg-gray-800 px-2 py-0.5 text-xs rounded" key={s}>{s}</span>
                                                         ))}
                                                     </div>
                                                 </div>
                                                 {nonEmptyEducation.length > 0 && (
                                                     <div>
-                                                        <h3 className="text-lg font-bold border-b border-gray-700 pb-2 mb-4">Education</h3>
+                                                        <h3 className="text-sm font-bold border-b border-gray-700 pb-1 mb-3">Education</h3>
                                                         {nonEmptyEducation.map((edu, i) => (
-                                                            <div key={i} className="mb-4 text-sm">
+                                                            <div key={i} className="mb-3 text-xs">
                                                                 <p className="font-bold">{edu.degree}</p>
                                                                 <p>{edu.institution}</p>
                                                                 <p className="opacity-60">{edu.year} {edu.score && `| Score: ${edu.score}`}</p>
@@ -895,10 +1266,10 @@ const BuildResume = () => {
                                                     </div>
                                                 )}
                                                 {nonEmptyCertifications.length > 0 && (
-                                                    <div className="mt-8">
-                                                        <h3 className="text-lg font-bold border-b border-gray-700 pb-2 mb-4">Certifications</h3>
+                                                    <div className="mt-5">
+                                                        <h3 className="text-sm font-bold border-b border-gray-700 pb-1 mb-3">Certifications</h3>
                                                         {nonEmptyCertifications.map((cert, i) => (
-                                                            <div key={i} className="mb-3 text-sm text-gray-300">
+                                                            <div key={i} className="mb-2 text-xs text-gray-300">
                                                                 <div className="font-bold">{cert.name}</div>
                                                                 <div>{cert.issuer}{cert.issueDate && ` · ${cert.issueDate}`}</div>
                                                                 {cert.description && <p className="text-xs">{cert.description}</p>}
@@ -907,82 +1278,82 @@ const BuildResume = () => {
                                                     </div>
                                                 )}
                                             </div>
-                                            <div className="w-2/3 bg-white p-8">
-                                                {summary && <div className="mb-8"><h3 className="text-xl font-bold text-gray-900 mb-2 uppercase">Profile</h3><p className="text-gray-600">{summary}</p></div>}
+                                            <div className="w-2/3 bg-white p-6">
+                                                {summary && <div className="mb-6"><h3 className="text-base font-bold text-gray-900 mb-1 uppercase">Profile</h3><p className="text-xs text-gray-600">{summary}</p></div>}
                                                 {nonEmptyExperiences.length > 0 && (
-                                                    <div className="mb-8"><h3 className="text-xl font-bold text-gray-900 mb-4 uppercase">Experience</h3>
+                                                    <div className="mb-6"><h3 className="text-base font-bold text-gray-900 mb-2 uppercase">Experience</h3>
                                                         {nonEmptyExperiences.map((exp, i) => (
-                                                            <div key={i} className="mb-6">
-                                                                <h4 className="font-bold text-lg">{exp.jobTitle}</h4>
-                                                                <p className="text-indigo-600 font-medium mb-1">{exp.company}</p>
-                                                                <p className="text-gray-400 text-sm mb-2">{exp.startDate} - {exp.endDate}</p>
-                                                                <p className="text-gray-600 text-sm">{exp.description}</p>
+                                                            <div key={i} className="mb-4">
+                                                                <h4 className="font-bold text-sm">{exp.jobTitle}</h4>
+                                                                <p className="text-indigo-600 font-medium text-xs mb-1">{exp.company}</p>
+                                                                <p className="text-gray-400 text-xs mb-1">{exp.startDate} - {exp.endDate}</p>
+                                                                <p className="text-gray-600 text-xs">{exp.description}</p>
                                                             </div>
                                                         ))}
                                                     </div>
                                                 )}
                                                 {nonEmptyProjects.length > 0 && (
-                                                    <div><h3 className="text-xl font-bold text-gray-900 mb-4 uppercase">Projects</h3>
+                                                    <div><h3 className="text-base font-bold text-gray-900 mb-2 uppercase">Projects</h3>
                                                         {nonEmptyProjects.map((proj, i) => (
-                                                            <div key={i} className="mb-5">
-                                                                <h4 className="font-bold text-lg">{proj.title}</h4>
-                                                                {proj.techStack && proj.techStack.length > 0 && <p className="text-indigo-600 text-sm mb-1">Tech Stack: {getTech(proj.techStack)}</p>}
-                                                                <p className="text-gray-600 text-sm">{proj.description}</p>
+                                                            <div key={i} className="mb-3">
+                                                                <h4 className="font-bold text-sm">{proj.title}</h4>
+                                                                {proj.techStack && proj.techStack.length > 0 && <p className="text-indigo-600 text-xs mb-1">Tech Stack: {getTech(proj.techStack)}</p>}
+                                                                <p className="text-gray-600 text-xs">{proj.description}</p>
                                                             </div>
                                                         ))}
                                                     </div>
                                                 )}
 
                                                 {nonEmptyAchievements.length > 0 && (
-                                                    <div className="mt-8">
-                                                        <h3 className="text-xl font-bold text-gray-900 mb-4 uppercase">Achievements</h3>
+                                                    <div className="mt-6">
+                                                        <h3 className="text-base font-bold text-gray-900 mb-2 uppercase">Achievements</h3>
                                                         {nonEmptyAchievements.map((ach, i) => (
-                                                            <div key={i} className="mb-3">
-                                                                <div className="font-bold">{ach.title}</div>
-                                                                <div className="text-sm text-gray-600">{ach.organization}{ach.date && ` · ${ach.date}`}</div>
-                                                                <p className="text-sm">{ach.description}</p>
+                                                            <div key={i} className="mb-2">
+                                                                <div className="font-bold text-sm">{ach.title}</div>
+                                                                <div className="text-xs text-gray-600">{ach.organization}{ach.date && ` · ${ach.date}`}</div>
+                                                                <p className="text-xs">{ach.description}</p>
                                                             </div>
                                                         ))}
                                                     </div>
                                                 )}
 
                                                 {nonEmptyActivities.length > 0 && (
-                                                    <div className="mt-8">
-                                                        <h3 className="text-xl font-bold text-gray-900 mb-4 uppercase">Activities</h3>
+                                                    <div className="mt-6">
+                                                        <h3 className="text-base font-bold text-gray-900 mb-2 uppercase">Activities</h3>
                                                         {nonEmptyActivities.map((act, i) => (
-                                                            <div key={i} className="mb-3">
-                                                                <div className="font-bold">{act.activity}</div>
-                                                                <div className="text-sm text-gray-600">{act.role}{act.organization && `, ${act.organization}`}</div>
+                                                            <div key={i} className="mb-2">
+                                                                <div className="font-bold text-sm">{act.activity}</div>
+                                                                <div className="text-xs text-gray-600">{act.role}{act.organization && `, ${act.organization}`}</div>
                                                                 <div className="text-xs text-gray-400">{act.startDate} - {act.endDate}</div>
-                                                                <p className="text-sm">{act.description}</p>
+                                                                <p className="text-xs">{act.description}</p>
                                                             </div>
                                                         ))}
                                                     </div>
                                                 )}
 
                                                 {nonEmptyVolunteering.length > 0 && (
-                                                    <div className="mt-8">
-                                                        <h3 className="text-xl font-bold text-gray-900 mb-4 uppercase">Volunteering</h3>
+                                                    <div className="mt-6">
+                                                        <h3 className="text-base font-bold text-gray-900 mb-2 uppercase">Volunteering</h3>
                                                         {nonEmptyVolunteering.map((vol, i) => (
-                                                            <div key={i} className="mb-3">
-                                                                <div className="font-bold">{vol.role}</div>
-                                                                <div className="text-sm text-gray-600">{vol.organization}</div>
+                                                            <div key={i} className="mb-2">
+                                                                <div className="font-bold text-sm">{vol.role}</div>
+                                                                <div className="text-xs text-gray-600">{vol.organization}</div>
                                                                 <div className="text-xs text-gray-400">{vol.startDate} - {vol.endDate}</div>
-                                                                <p className="text-sm">{vol.description}</p>
+                                                                <p className="text-xs">{vol.description}</p>
                                                             </div>
                                                         ))}
                                                     </div>
                                                 )}
 
                                                 {nonEmptyWorkshops.length > 0 && (
-                                                    <div className="mt-8">
-                                                        <h3 className="text-xl font-bold text-gray-900 mb-4 uppercase">Workshops & Trainings</h3>
+                                                    <div className="mt-6">
+                                                        <h3 className="text-base font-bold text-gray-900 mb-2 uppercase">Workshops & Trainings</h3>
                                                         {nonEmptyWorkshops.map((ws, i) => (
-                                                            <div key={i} className="mb-3">
-                                                                <div className="font-bold">{ws.title}</div>
-                                                                <div className="text-sm text-gray-600">{ws.role}{ws.organization && `, ${ws.organization}`}</div>
+                                                            <div key={i} className="mb-2">
+                                                                <div className="font-bold text-sm">{ws.title}</div>
+                                                                <div className="text-xs text-gray-600">{ws.role}{ws.organization && `, ${ws.organization}`}</div>
                                                                 <div className="text-xs text-gray-400">{ws.startDate} - {ws.endDate}</div>
-                                                                <p className="text-sm">{ws.description}</p>
+                                                                <p className="text-xs">{ws.description}</p>
                                                             </div>
                                                         ))}
                                                     </div>
@@ -994,94 +1365,94 @@ const BuildResume = () => {
                                     );
                                 case 5: // Executive
                                     return (
-                                        <div className="font-serif border-t-8 border-indigo-900 p-8 max-w-4xl mx-auto">
-                                            <header className="flex justify-between items-end border-b-2 border-gray-200 pb-6 mb-6">
+                                        <div className="font-serif border-t-4 border-indigo-900 p-6 max-w-4xl mx-auto">
+                                            <header className="flex justify-between items-end border-b border-gray-200 pb-4 mb-4">
                                                 <div>
-                                                    <h1 className="text-4xl font-bold text-indigo-900">{personalInfo.fullName}</h1>
-                                                    {personalInfo.title && <p className="text-xl text-gray-500 mt-2">{personalInfo.title}</p>}
+                                                    <h1 className="text-2xl font-bold text-indigo-900">{personalInfo.fullName}</h1>
+                                                    {personalInfo.title && <p className="text-sm text-gray-500 mt-1">{personalInfo.title}</p>}
                                                 </div>
-                                                <div className="text-right text-sm space-y-1 text-gray-600">
+                                                <div className="text-right text-xs space-y-1 text-gray-600">
                                                     <p>{personalInfo.email}</p>
                                                     <p>{personalInfo.phone}</p>
                                                     <p>{personalInfo.linkedin}</p>
                                                 </div>
                                             </header>
-                                            <div className="grid grid-cols-3 gap-8">
-                                                <div className="col-span-2 space-y-6">
-                                                    {summary && <section><h3 className="text-indigo-900 font-bold uppercase tracking-wider mb-3">Executive Summary</h3><p className="text-gray-700 leading-relaxed">{summary}</p></section>}
+                                            <div className="grid grid-cols-3 gap-5">
+                                                <div className="col-span-2 space-y-5">
+                                                    {summary && <section><h3 className="text-indigo-900 font-bold uppercase tracking-wider text-xs mb-2">Executive Summary</h3><p className="text-xs text-gray-700 leading-relaxed">{summary}</p></section>}
                                                     {nonEmptyExperiences.length > 0 && (
-                                                        <section><h3 className="text-indigo-900 font-bold uppercase tracking-wider mb-4">Experience</h3>
+                                                        <section><h3 className="text-indigo-900 font-bold uppercase tracking-wider text-xs mb-2">Experience</h3>
                                                             {nonEmptyExperiences.map((exp, i) => (
-                                                                <div key={i} className="mb-5 border-l-2 border-indigo-100 pl-4">
-                                                                    <h4 className="font-bold text-gray-800">{exp.jobTitle}</h4>
-                                                                    <div className="flex justify-between text-sm text-indigo-600 font-medium mb-2"><span>{exp.company}</span><span>{exp.startDate} - {exp.endDate}</span></div>
-                                                                    <p className="text-sm text-gray-600">{exp.description}</p>
+                                                                <div key={i} className="mb-3 border-l-2 border-indigo-100 pl-3">
+                                                                    <h4 className="font-bold text-xs text-gray-800">{exp.jobTitle}</h4>
+                                                                    <div className="flex justify-between text-xs text-indigo-600 font-medium mb-1"><span>{exp.company}</span><span>{exp.startDate} - {exp.endDate}</span></div>
+                                                                    <p className="text-xs text-gray-600">{exp.description}</p>
                                                                 </div>
                                                             ))}
                                                         </section>
                                                     )}
                                                     {nonEmptyProjects.length > 0 && (
-                                                        <section><h3 className="text-indigo-900 font-bold uppercase tracking-wider mb-4">Key Projects</h3>
+                                                        <section><h3 className="text-indigo-900 font-bold uppercase tracking-wider text-xs mb-2">Key Projects</h3>
                                                             {nonEmptyProjects.map((proj, i) => (
-                                                                <div key={i} className="mb-4 border-l-2 border-indigo-100 pl-4">
-                                                                    <h4 className="font-bold text-gray-800">{proj.title}</h4>
+                                                                <div key={i} className="mb-2 border-l-2 border-indigo-100 pl-3">
+                                                                    <h4 className="font-bold text-xs text-gray-800">{proj.title}</h4>
                                                                     {proj.techStack && proj.techStack.length > 0 && <p className="text-xs text-indigo-600 mb-1">Technologies: {getTech(proj.techStack)}</p>}
-                                                                    <p className="text-sm text-gray-600">{proj.description}</p>
+                                                                    <p className="text-xs text-gray-600">{proj.description}</p>
                                                                 </div>
                                                             ))}
                                                         </section>
                                                     )}
 
                                                     {nonEmptyAchievements.length > 0 && (
-                                                        <section className="mt-6">
-                                                            <h3 className="text-indigo-900 font-bold uppercase tracking-wider mb-3">Achievements</h3>
+                                                        <section className="mt-4">
+                                                            <h3 className="text-indigo-900 font-bold uppercase tracking-wider text-xs mb-2">Achievements</h3>
                                                             {nonEmptyAchievements.map((ach, i) => (
-                                                                <div key={i} className="mb-3 pl-4 border-l-2 border-indigo-100">
-                                                                    <h4 className="font-bold text-gray-800">{ach.title}</h4>
+                                                                <div key={i} className="mb-2 pl-3 border-l-2 border-indigo-100">
+                                                                    <h4 className="font-bold text-xs text-gray-800">{ach.title}</h4>
                                                                     <div className="text-xs text-gray-600">{ach.organization}{ach.date && ` · ${ach.date}`}</div>
-                                                                    <p className="text-sm text-gray-600">{ach.description}</p>
+                                                                    <p className="text-xs text-gray-600">{ach.description}</p>
                                                                 </div>
                                                             ))}
                                                         </section>
                                                     )}
 
                                                     {nonEmptyActivities.length > 0 && (
-                                                        <section className="mt-6">
-                                                            <h3 className="text-indigo-900 font-bold uppercase tracking-wider mb-3">Activities</h3>
+                                                        <section className="mt-4">
+                                                            <h3 className="text-indigo-900 font-bold uppercase tracking-wider text-xs mb-2">Activities</h3>
                                                             {nonEmptyActivities.map((act, i) => (
-                                                                <div key={i} className="mb-3 pl-4 border-l-2 border-indigo-100">
-                                                                    <h4 className="font-bold text-gray-800">{act.activity}</h4>
+                                                                <div key={i} className="mb-2 pl-3 border-l-2 border-indigo-100">
+                                                                    <h4 className="font-bold text-xs text-gray-800">{act.activity}</h4>
                                                                     <div className="text-xs text-gray-600">{act.role}{act.organization && `, ${act.organization}`}</div>
                                                                     <div className="text-xs text-gray-400">{act.startDate} - {act.endDate}</div>
-                                                                    <p className="text-sm text-gray-600">{act.description}</p>
+                                                                    <p className="text-xs text-gray-600">{act.description}</p>
                                                                 </div>
                                                             ))}
                                                         </section>
                                                     )}
 
                                                     {nonEmptyVolunteering.length > 0 && (
-                                                        <section className="mt-6">
-                                                            <h3 className="text-indigo-900 font-bold uppercase tracking-wider mb-3">Volunteering</h3>
+                                                        <section className="mt-4">
+                                                            <h3 className="text-indigo-900 font-bold uppercase tracking-wider text-xs mb-2">Volunteering</h3>
                                                             {nonEmptyVolunteering.map((vol, i) => (
-                                                                <div key={i} className="mb-3 pl-4 border-l-2 border-indigo-100">
-                                                                    <h4 className="font-bold text-gray-800">{vol.role}</h4>
+                                                                <div key={i} className="mb-2 pl-3 border-l-2 border-indigo-100">
+                                                                    <h4 className="font-bold text-xs text-gray-800">{vol.role}</h4>
                                                                     <div className="text-xs text-gray-600">{vol.organization}</div>
                                                                     <div className="text-xs text-gray-400">{vol.startDate} - {vol.endDate}</div>
-                                                                    <p className="text-sm text-gray-600">{vol.description}</p>
+                                                                    <p className="text-xs text-gray-600">{vol.description}</p>
                                                                 </div>
                                                             ))}
                                                         </section>
                                                     )}
 
                                                     {nonEmptyWorkshops.length > 0 && (
-                                                        <section className="mt-6">
-                                                            <h3 className="text-indigo-900 font-bold uppercase tracking-wider mb-3">Workshops & Trainings</h3>
+                                                        <section className="mt-4">
+                                                            <h3 className="text-indigo-900 font-bold uppercase tracking-wider text-xs mb-2">Workshops & Trainings</h3>
                                                             {nonEmptyWorkshops.map((ws, i) => (
-                                                                <div key={i} className="mb-3 pl-4 border-l-2 border-indigo-100">
-                                                                    <h4 className="font-bold text-gray-800">{ws.title}</h4>
+                                                                <div key={i} className="mb-2 pl-3 border-l-2 border-indigo-100">
+                                                                    <h4 className="font-bold text-xs text-gray-800">{ws.title}</h4>
                                                                     <div className="text-xs text-gray-600">{ws.role}{ws.organization && `, ${ws.organization}`}</div>
                                                                     <div className="text-xs text-gray-400">{ws.startDate} - {ws.endDate}</div>
-                                                                    <p className="text-sm text-gray-600">{ws.description}</p>
+                                                                    <p className="text-xs text-gray-600">{ws.description}</p>
                                                                 </div>
                                                             ))}
                                                         </section>
@@ -1089,21 +1460,21 @@ const BuildResume = () => {
 
                                                     {renderReferencesSection()}
                                                 </div>
-                                                <div className="space-y-6">
+                                                <div className="space-y-4">
                                                     {skills.some(s => s.trim()) && (
-                                                        <section className="bg-gray-50 p-4 rounded-lg"><h3 className="text-indigo-900 font-bold uppercase tracking-wider mb-3">Expertise</h3>
-                                                            <ul className="space-y-2 text-sm text-gray-700">
+                                                        <section className="bg-gray-50 p-3 rounded-lg"><h3 className="text-indigo-900 font-bold uppercase tracking-wider text-xs mb-2">Expertise</h3>
+                                                            <ul className="space-y-1 text-xs text-gray-700">
                                                                 {skills.filter(s => s.trim()).map((s, i) => (
-                                                                    <li key={i} className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-indigo-400 rounded-full" />{s}</li>
+                                                                    <li key={i} className="flex items-center gap-1"><div className="w-1 h-1 bg-indigo-400 rounded-full" />{s}</li>
                                                                 ))}
                                                             </ul>
                                                         </section>
                                                     )}
                                                     {nonEmptyEducation.length > 0 && (
-                                                        <section><h3 className="text-indigo-900 font-bold uppercase tracking-wider mb-3">Education</h3>
+                                                        <section><h3 className="text-indigo-900 font-bold uppercase tracking-wider text-xs mb-2">Education</h3>
                                                             {nonEmptyEducation.map((edu, i) => (
-                                                                <div key={i} className="mb-3">
-                                                                    <p className="font-bold text-gray-800 text-sm">{edu.institution}</p>
+                                                                <div key={i} className="mb-2">
+                                                                    <p className="font-bold text-xs text-gray-800">{edu.institution}</p>
                                                                     <p className="text-xs text-gray-600">{edu.degree}</p>
                                                                     <p className="text-xs text-gray-400">{edu.year} {edu.score && `- ${edu.score}`}</p>
                                                                 </div>
@@ -1112,11 +1483,11 @@ const BuildResume = () => {
                                                     )}
 
                                                     {nonEmptyCertifications.length > 0 && (
-                                                        <section className="mt-6">
-                                                            <h3 className="text-indigo-900 font-bold uppercase tracking-wider mb-3">Credentials</h3>
+                                                        <section className="mt-4">
+                                                            <h3 className="text-indigo-900 font-bold uppercase tracking-wider text-xs mb-2">Credentials</h3>
                                                             {nonEmptyCertifications.map((cert, i) => (
-                                                                <div key={i} className="mb-3">
-                                                                    <div className="font-bold text-gray-800 text-sm">{cert.name}</div>
+                                                                <div key={i} className="mb-2">
+                                                                    <div className="font-bold text-xs text-gray-800">{cert.name}</div>
                                                                     <div className="text-xs text-gray-600">{cert.issuer}{cert.issueDate && ` · ${cert.issueDate}`}</div>
                                                                     {cert.description && <p className="text-xs text-gray-500 mt-1">{cert.description}</p>}
                                                                 </div>
@@ -1130,65 +1501,65 @@ const BuildResume = () => {
 
                                 default: // 1: Clean Corporate (Default)
                                     return (
-                                        <div className="font-sans text-gray-800 p-6 max-w-[800px] mx-auto border border-gray-200 shadow-sm bg-white">
-                                            <h1 className="text-3xl font-bold text-center mb-1">{personalInfo.fullName}</h1>
-                                            {personalInfo.title && <p className="text-center text-gray-600 text-sm mb-2">{personalInfo.title}</p>}
-                                            <div className="flex justify-center gap-4 text-sm text-gray-600 mb-6 border-b pb-4">
+                                        <div className="font-sans text-gray-800 p-5 max-w-[800px] mx-auto border border-gray-200 shadow-sm bg-white">
+                                            <h1 className="text-2xl font-bold text-center mb-1">{personalInfo.fullName}</h1>
+                                            {personalInfo.title && <p className="text-center text-gray-600 text-xs mb-2">{personalInfo.title}</p>}
+                                            <div className="flex justify-center gap-3 text-xs text-gray-600 mb-4 border-b pb-3">
                                                 <span>{personalInfo.email}</span>
                                                 <span>|</span>
                                                 <span>{personalInfo.phone}</span>
                                                 {personalInfo.linkedin && <><span>|</span><span>{personalInfo.linkedin}</span></>}
                                             </div>
-                                            {summary && <div className="mb-6"><h2 className="text-lg font-bold uppercase text-gray-700 mb-2">Summary</h2><p className="text-sm leading-relaxed">{summary}</p></div>}
+                                            {summary && <div className="mb-5"><h2 className="text-sm font-bold uppercase text-gray-700 mb-2">Summary</h2><p className="text-xs leading-relaxed">{summary}</p></div>}
                                             {nonEmptyExperiences.length > 0 && (
-                                                <div className="mb-6"><h2 className="text-lg font-bold uppercase text-gray-700 mb-3">Experience</h2>
+                                                <div className="mb-5"><h2 className="text-sm font-bold uppercase text-gray-700 mb-2">Experience</h2>
                                                     {nonEmptyExperiences.map((exp, i) => (
-                                                        <div key={i} className="mb-4">
-                                                            <div className="flex justify-between items-baseline mb-1"><h3 className="font-bold">{exp.jobTitle}</h3><span className="text-sm text-gray-500">{exp.startDate} - {exp.endDate}</span></div>
-                                                            <div className="text-sm font-semibold text-gray-600 mb-1">{exp.company}</div>
-                                                            <p className="text-sm">{exp.description}</p>
+                                                        <div key={i} className="mb-3">
+                                                            <div className="flex justify-between items-baseline mb-1"><h3 className="font-bold text-xs">{exp.jobTitle}</h3><span className="text-xs text-gray-500">{exp.startDate} - {exp.endDate}</span></div>
+                                                            <div className="text-xs font-semibold text-gray-600 mb-1">{exp.company}</div>
+                                                            <p className="text-xs">{exp.description}</p>
                                                         </div>
                                                     ))}
                                                 </div>
                                             )}
                                             {nonEmptyProjects.length > 0 && (
-                                                <div className="mb-6"><h2 className="text-lg font-bold uppercase text-gray-700 mb-3">Projects</h2>
+                                                <div className="mb-5"><h2 className="text-sm font-bold uppercase text-gray-700 mb-2">Projects</h2>
                                                     {nonEmptyProjects.map((proj, i) => (
-                                                        <div key={i} className="mb-4">
-                                                            <h3 className="font-bold">{proj.title}</h3>
+                                                        <div key={i} className="mb-3">
+                                                            <h3 className="font-bold text-xs">{proj.title}</h3>
                                                             {proj.techStack && proj.techStack.length > 0 && <div className="text-xs text-gray-500 mb-1">Technologies: {getTech(proj.techStack)}</div>}
-                                                            <p className="text-sm">{proj.description}</p>
+                                                            <p className="text-xs">{proj.description}</p>
                                                         </div>
                                                     ))}
                                                 </div>
                                             )}
                                             {nonEmptyEducation.length > 0 && (
-                                                <div className="mb-6"><h2 className="text-lg font-bold uppercase text-gray-700 mb-3">Education</h2>
+                                                <div className="mb-5"><h2 className="text-sm font-bold uppercase text-gray-700 mb-2">Education</h2>
                                                     {nonEmptyEducation.map((edu, i) => (
                                                         <div key={i} className="flex justify-between items-baseline mb-2">
                                                             <div>
-                                                                <div className="font-bold">{edu.institution}</div>
-                                                                <div className="text-sm">{edu.degree}</div>
+                                                                <div className="font-bold text-xs">{edu.institution}</div>
+                                                                <div className="text-xs">{edu.degree}</div>
                                                                 {edu.score && <div className="text-xs text-gray-500">Score: {edu.score}</div>}
                                                             </div>
-                                                            <div className="text-sm text-gray-500">{edu.year}</div>
+                                                            <div className="text-xs text-gray-500">{edu.year}</div>
                                                         </div>
                                                     ))}
                                                 </div>
                                             )}
                                             {skills.some(s => s.trim()) && (
-                                                <div><h2 className="text-lg font-bold uppercase text-gray-700 mb-2">Skills</h2>
-                                                    <div className="text-sm">{skills.filter(s => s.trim()).join(' • ')}</div>
+                                                <div><h2 className="text-sm font-bold uppercase text-gray-700 mb-2">Skills</h2>
+                                                    <div className="text-xs">{skills.filter(s => s.trim()).join(' • ')}</div>
                                                 </div>
                                             )}
 
                                             {nonEmptyCertifications.length > 0 && (
-                                                <div className="mt-6">
-                                                    <h2 className="text-lg font-bold uppercase text-gray-700 mb-3">Certifications</h2>
+                                                <div className="mt-5">
+                                                    <h2 className="text-sm font-bold uppercase text-gray-700 mb-2">Certifications</h2>
                                                     {nonEmptyCertifications.map((cert, i) => (
-                                                        <div key={i} className="mb-3">
-                                                            <div className="font-bold">{cert.name}</div>
-                                                            <div className="text-sm text-gray-600">{cert.issuer}{cert.issueDate && ` · ${cert.issueDate}`}</div>
+                                                        <div key={i} className="mb-2">
+                                                            <div className="font-bold text-xs">{cert.name}</div>
+                                                            <div className="text-xs text-gray-600">{cert.issuer}{cert.issueDate && ` · ${cert.issueDate}`}</div>
                                                             {cert.description && <p className="text-xs text-gray-500 mt-1">{cert.description}</p>}
                                                             {cert.url && <a href={cert.url} target="_blank" rel="noreferrer" className="text-xs text-blue-500 hover:underline">Verify</a>}
                                                         </div>
@@ -1197,55 +1568,55 @@ const BuildResume = () => {
                                             )}
 
                                             {nonEmptyAchievements.length > 0 && (
-                                                <div className="mt-6">
-                                                    <h2 className="text-lg font-bold uppercase text-gray-700 mb-3">Achievements</h2>
+                                                <div className="mt-5">
+                                                    <h2 className="text-sm font-bold uppercase text-gray-700 mb-2">Achievements</h2>
                                                     {nonEmptyAchievements.map((ach, i) => (
-                                                        <div key={i} className="mb-3">
-                                                            <div className="font-bold">{ach.title}</div>
-                                                            <div className="text-sm text-gray-600">{ach.organization}{ach.date && ` · ${ach.date}`}</div>
-                                                            <p className="text-sm">{ach.description}</p>
+                                                        <div key={i} className="mb-2">
+                                                            <div className="font-bold text-xs">{ach.title}</div>
+                                                            <div className="text-xs text-gray-600">{ach.organization}{ach.date && ` · ${ach.date}`}</div>
+                                                            <p className="text-xs">{ach.description}</p>
                                                         </div>
                                                     ))}
                                                 </div>
                                             )}
 
                                             {nonEmptyActivities.length > 0 && (
-                                                <div className="mt-6">
-                                                    <h2 className="text-lg font-bold uppercase text-gray-700 mb-3">Activities</h2>
+                                                <div className="mt-5">
+                                                    <h2 className="text-sm font-bold uppercase text-gray-700 mb-2">Activities</h2>
                                                     {nonEmptyActivities.map((act, i) => (
-                                                        <div key={i} className="mb-3">
-                                                            <div className="font-bold">{act.activity}</div>
-                                                            <div className="text-sm text-gray-600">{act.role}{act.organization && `, ${act.organization}`}</div>
+                                                        <div key={i} className="mb-2">
+                                                            <div className="font-bold text-xs">{act.activity}</div>
+                                                            <div className="text-xs text-gray-600">{act.role}{act.organization && `, ${act.organization}`}</div>
                                                             <div className="text-xs text-gray-400">{act.startDate} - {act.endDate}</div>
-                                                            <p className="text-sm">{act.description}</p>
+                                                            <p className="text-xs">{act.description}</p>
                                                         </div>
                                                     ))}
                                                 </div>
                                             )}
 
                                             {nonEmptyVolunteering.length > 0 && (
-                                                <div className="mt-6">
-                                                    <h2 className="text-lg font-bold uppercase text-gray-700 mb-3">Volunteering</h2>
+                                                <div className="mt-5">
+                                                    <h2 className="text-sm font-bold uppercase text-gray-700 mb-2">Volunteering</h2>
                                                     {nonEmptyVolunteering.map((vol, i) => (
-                                                        <div key={i} className="mb-3">
-                                                            <div className="font-bold">{vol.role}</div>
-                                                            <div className="text-sm text-gray-600">{vol.organization}</div>
+                                                        <div key={i} className="mb-2">
+                                                            <div className="font-bold text-xs">{vol.role}</div>
+                                                            <div className="text-xs text-gray-600">{vol.organization}</div>
                                                             <div className="text-xs text-gray-400">{vol.startDate} - {vol.endDate}</div>
-                                                            <p className="text-sm">{vol.description}</p>
+                                                            <p className="text-xs">{vol.description}</p>
                                                         </div>
                                                     ))}
                                                 </div>
                                             )}
 
                                             {nonEmptyWorkshops.length > 0 && (
-                                                <div className="mt-6">
-                                                    <h2 className="text-lg font-bold uppercase text-gray-700 mb-3">Workshops & Trainings</h2>
+                                                <div className="mt-5">
+                                                    <h2 className="text-sm font-bold uppercase text-gray-700 mb-2">Workshops & Trainings</h2>
                                                     {nonEmptyWorkshops.map((ws, i) => (
-                                                        <div key={i} className="mb-3">
-                                                            <div className="font-bold">{ws.title}</div>
-                                                            <div className="text-sm text-gray-600">{ws.role}{ws.organization && `, ${ws.organization}`}</div>
+                                                        <div key={i} className="mb-2">
+                                                            <div className="font-bold text-xs">{ws.title}</div>
+                                                            <div className="text-xs text-gray-600">{ws.role}{ws.organization && `, ${ws.organization}`}</div>
                                                             <div className="text-xs text-gray-400">{ws.startDate} - {ws.endDate}</div>
-                                                            <p className="text-sm">{ws.description}</p>
+                                                            <p className="text-xs">{ws.description}</p>
                                                         </div>
                                                     ))}
                                                 </div>
@@ -1325,40 +1696,25 @@ const BuildResume = () => {
         html2pdf().set(opt).from(element).save();
     };
 
-//     const handleDownload = () => {
-//     const element = resumeRef.current;
-
-//     const opt = {
-//         margin: [0.5, 0.5],
-//         filename: `${formData.personalInfo.fullName.replace(/\s+/g, '_')}_Resume.pdf`,
-//         image: { type: 'jpeg', quality: 1 },
-//         html2canvas: {
-//             scale: 3,
-//             useCORS: true
-//         },
-//         jsPDF: {
-//             unit: 'in',
-//             format: 'a4',
-//             orientation: 'portrait'
-//         },
-//         pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
-//     };
-
-//     html2pdf().set(opt).from(element).save();
-// };
-
     return (
         <div className="w-full h-full flex flex-col">
-            <div className="flex justify-between items-center mb-6">
-                <h2 className="text-3xl font-bold text-gray-900">Resume Builder</h2>
+            <div className="flex justify-between items-center mb-5">
+                <h2 className="text-2xl font-bold text-gray-900">Resume Builder</h2>
                 <div className="flex gap-2">
                     {step === 8 ? (
                         <>
-                            <button onClick={handleSave} disabled={saving} className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition">
-                                <Save size={18} /> {saving ? 'Saving...' : 'Save Resume'}
+                            <button
+                                onClick={handleSave}
+                                disabled={saving}
+                                className="flex items-center gap-1 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition text-sm shadow-sm"
+                            >
+                                <Save size={16} /> {saving ? 'Saving...' : 'Save Resume'}
                             </button>
-                            <button onClick={handleDownload} className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition">
-                                <Download size={18} /> Download PDF
+                            <button
+                                onClick={handleDownload}
+                                className="flex items-center gap-1 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition text-sm shadow-sm"
+                            >
+                                <Download size={16} /> Download PDF
                             </button>
                         </>
                     ) : (
@@ -1367,16 +1723,20 @@ const BuildResume = () => {
                 </div>
             </div>
 
-            {/* Tabs */}
-            <div className="flex border-b border-gray-200 mb-6">
+            {/* Tabs - Enlarged to match step navigation */}
+            <div className="flex border-b border-gray-200 mb-5 gap-4">
                 <button
-                    className={`py-2 px-4 font-medium border-b-2 transition-colors ${activeTab === 'manual' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
+                    className={`py-2 px-4 text-base font-medium border-b-2 transition-colors ${
+                        activeTab === 'manual' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-700'
+                    }`}
                     onClick={() => setActiveTab('manual')}
                 >
                     Manual Build
                 </button>
                 <button
-                    className={`py-2 px-4 font-medium border-b-2 transition-colors ${activeTab === 'history' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
+                    className={`py-2 px-4 text-base font-medium border-b-2 transition-colors ${
+                        activeTab === 'history' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-700'
+                    }`}
                     onClick={() => setActiveTab('history')}
                 >
                     Load from History
@@ -1385,15 +1745,15 @@ const BuildResume = () => {
 
             {/* History selection dropdown */}
             {activeTab === 'history' && (
-                <div className="mb-6 bg-white p-4 rounded-lg border border-gray-200">
+                <div className="mb-5 bg-white p-4 rounded-lg border-2 border-dashed border-gray-300">
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                         Select a previously saved resume
                     </label>
                     {loadingResumes ? (
-                        <p className="text-gray-500">Loading resumes...</p>
+                        <p className="text-gray-500 text-sm">Loading resumes...</p>
                     ) : (
                         <select
-                            className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-primary focus:border-primary"
+                            className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-primary focus:border-primary"
                             value={selectedResumeId}
                             onChange={(e) => setSelectedResumeId(e.target.value)}
                         >
@@ -1406,22 +1766,28 @@ const BuildResume = () => {
                         </select>
                     )}
                     {resumesList.length === 0 && !loadingResumes && (
-                        <p className="text-sm text-gray-500 mt-2">No resumes found. Upload one first.</p>
+                        <p className="text-xs text-gray-500 mt-2">No resumes found. Upload one first.</p>
                     )}
                 </div>
             )}
 
             {/* Step Navigation – 8 steps */}
-            <div className="flex gap-4 mb-8 overflow-x-auto pb-2">
-                {['Personal', 'Education', 'Experience', 'Skills & Projects', 'Certifications', 'Activities', 'References', 'Preview'].map((label, i) => (
-                    <button key={i} onClick={() => setStep(i + 1)} className={`pb-2 px-2 border-b-2 transition-colors whitespace-nowrap ${step === i + 1 ? 'border-indigo-600 text-indigo-700 font-bold' : 'border-transparent text-gray-500 hover:text-gray-700'}`}>
+            <div className="flex gap-4 mb-5 overflow-x-auto pb-2">
+                {['Personal', 'Education', 'Experience', 'Skills', 'Certifications', 'Activities', 'References', 'Preview'].map((label, i) => (
+                    <button
+                        key={i}
+                        onClick={() => setStep(i + 1)}
+                        className={`py-2 px-4 border-b-2 transition-colors whitespace-nowrap text-base ${
+                            step === i + 1 ? 'border-indigo-600 text-indigo-700 font-bold' : 'border-transparent text-gray-500 hover:text-gray-700'
+                        }`}
+                    >
                         {label}
                     </button>
                 ))}
             </div>
 
             {/* Content Area */}
-            <div className="flex-1 overflow-y-auto pb-20">
+            <div className="flex-1 overflow-y-auto pb-16">
                 {step === 1 && renderPersonalInfo()}
                 {step === 2 && renderEducation()}
                 {step === 3 && renderExperience()}
@@ -1430,16 +1796,18 @@ const BuildResume = () => {
                 {step === 6 && renderAdditionalActivities()}
                 {step === 7 && renderReferences()}
                 {step === 8 && (
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                        <div className="lg:col-span-1 space-y-4">
-                            <h3 className="font-bold text-gray-700">Select Template</h3>
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+                        <div className="lg:col-span-1 space-y-3">
+                            <h3 className="font-bold text-gray-700 text-sm">Select Template</h3>
                             {[1, 2, 3, 4, 5].map(tId => (
                                 <button
                                     key={tId}
                                     onClick={() => setSelectedTemplate(tId)}
-                                    className={`w-full p-4 border rounded-lg text-left transition-all ${selectedTemplate === tId ? 'border-primary ring-2 ring-primary/20 bg-primary/5' : 'hover:bg-gray-50'}`}
+                                    className={`w-full p-3 border rounded-lg text-left transition-all text-sm ${
+                                        selectedTemplate === tId ? 'border-primary ring-2 ring-primary/20 bg-primary/5' : 'hover:bg-gray-50'
+                                    }`}
                                 >
-                                    <div className="font-bold text-gray-800">
+                                    <div className="font-bold text-gray-800 text-sm">
                                         {tId === 1 && 'Clean Corporate'}
                                         {tId === 2 && 'Modern Tech'}
                                         {tId === 3 && 'Minimalist Serif'}
@@ -1464,20 +1832,22 @@ const BuildResume = () => {
             </div>
 
             {/* Footer Navigation */}
-            <div className="pt-4 border-t border-gray-200 flex justify-between mt-auto">
+            <div className="pt-3 border-t border-gray-200 flex justify-between mt-auto">
                 <button
                     onClick={() => setStep(p => Math.max(1, p - 1))}
                     disabled={step === 1}
-                    className={`flex items-center gap-2 px-6 py-2 rounded border ${step === 1 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-50'}`}
+                    className={`flex items-center gap-1 px-5 py-2 rounded border text-sm ${
+                        step === 1 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-50'
+                    }`}
                 >
-                    <ChevronLeft size={18} /> Previous
+                    <ChevronLeft size={16} /> Previous
                 </button>
                 {step < 8 && (
                     <button
                         onClick={handleNext}
-                        className="flex items-center gap-2 px-6 py-2 bg-primary text-white rounded hover:bg-opacity-90"
+                        className="flex items-center gap-1 px-5 py-2 bg-primary text-white rounded-md hover:bg-opacity-90 text-sm shadow-sm"
                     >
-                        Next <ChevronRight size={18} />
+                        Next <ChevronRight size={16} />
                     </button>
                 )}
             </div>

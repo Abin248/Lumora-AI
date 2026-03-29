@@ -18,7 +18,7 @@ const interviewSchema = new mongoose.Schema({
         }
     ],
     feedback: {
-        type: String // Final feedback summary
+        type: String
     }
 }, {
     timestamps: true,

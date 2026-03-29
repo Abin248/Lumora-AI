@@ -1,11 +1,15 @@
 // import { useState, useEffect, useRef } from 'react';
-// import { Mic, MicOff, Send, Play, FileText, CheckCircle, AlertCircle, Volume2 } from 'lucide-react';
+// import { Mic, MicOff, Send, FileText, CheckCircle, AlertCircle, Volume2, Speaker, X } from 'lucide-react';
 // import axiosClient from '../../api/axiosClient';
+// import { getResumes } from '../../api/resumeApi';
 // import stareImage from '../../assets/stare.png';
 
 // const SpeechTest = () => {
 //     // State
 //     const [jobPosition, setJobPosition] = useState('');
+//     const [resumes, setResumes] = useState([]);
+//     const [selectedResumeId, setSelectedResumeId] = useState('');
+//     const [fetchingResumes, setFetchingResumes] = useState(true);
 //     const [isStarted, setIsStarted] = useState(false);
 //     const [isListening, setIsListening] = useState(false);
 //     const [isSpeaking, setIsSpeaking] = useState(false);
@@ -14,28 +18,114 @@
 //     const [loading, setLoading] = useState(false);
 //     const [report, setReport] = useState(null);
 //     const [error, setError] = useState('');
+//     const [showPermissionModal, setShowPermissionModal] = useState(false);
 //     const [questionCount, setQuestionCount] = useState(0);
+
+//     // Voice state
+//     const [voices, setVoices] = useState([]);
+//     const [selectedVoice, setSelectedVoice] = useState(null);
+//     const selectedVoiceRef = useRef(null);
 
 //     // Refs
 //     const recognitionRef = useRef(null);
 
-//     // Text-to-Speech
+//     // Waveform bar heights (symmetrical: ends low, middle high)
+//     const barHeights = [1.2, 1.6, 2.0, 2.4, 2.8, 2.4, 2.0, 1.6, 1.2]; // in rem
+
+//     // --- Load available voices ---
+//     useEffect(() => {
+//         const loadVoices = () => {
+//             const availableVoices = window.speechSynthesis.getVoices();
+//             console.log('Available voices:', availableVoices);
+//             setVoices(availableVoices);
+
+//             const savedVoiceName = localStorage.getItem('preferredVoice');
+//             if (savedVoiceName) {
+//                 const savedVoice = availableVoices.find(v => v.name === savedVoiceName);
+//                 if (savedVoice) {
+//                     setSelectedVoice(savedVoice);
+//                     selectedVoiceRef.current = savedVoice;
+//                     return;
+//                 }
+//             }
+//             const defaultVoice = availableVoices.find(v => v.lang.includes('en-')) || availableVoices[0];
+//             setSelectedVoice(defaultVoice || null);
+//             selectedVoiceRef.current = defaultVoice || null;
+//         };
+
+//         if (window.speechSynthesis.getVoices().length) {
+//             loadVoices();
+//         } else {
+//             window.speechSynthesis.onvoiceschanged = loadVoices;
+//         }
+
+//         return () => {
+//             window.speechSynthesis.onvoiceschanged = null;
+//         };
+//     }, []);
+
+//     // Update ref whenever selectedVoice changes
+//     useEffect(() => {
+//         selectedVoiceRef.current = selectedVoice;
+//     }, [selectedVoice]);
+
+//     // --- Fetch resumes on mount ---
+//     useEffect(() => {
+//         const fetchResumes = async () => {
+//             try {
+//                 const { data } = await getResumes();
+//                 setResumes(data);
+//                 if (data.length > 0) setSelectedResumeId(data[0]._id);
+//             } catch (err) {
+//                 console.error("Failed to fetch resumes:", err);
+//                 setError("Could not load your resumes. Please try again.");
+//             } finally {
+//                 setFetchingResumes(false);
+//             }
+//         };
+//         fetchResumes();
+//     }, []);
+
+//     // --- Text-to-Speech with selected voice ---
 //     const speak = (text) => {
 //         if ('speechSynthesis' in window) {
 //             window.speechSynthesis.cancel();
-//             const speech = new SpeechSynthesisUtterance(text);
-//             speech.lang = "en-US";
-//             speech.rate = 1;
-//             speech.pitch = 1;
-//             setIsSpeaking(true);
-//             speech.onend = () => setIsSpeaking(false);
-//             speech.onerror = () => setIsSpeaking(false);
-//             window.speechSynthesis.speak(speech);
+
+//             const utterance = new SpeechSynthesisUtterance(text);
+//             utterance.lang = "en-US";
+//             utterance.rate = 1;
+//             utterance.pitch = 1;
+
+//             const voiceToUse = selectedVoiceRef.current;
+//             if (voiceToUse) {
+//                 utterance.voice = voiceToUse;
+//                 console.log('Speaking with voice:', voiceToUse.name);
+//             } else {
+//                 console.warn('No voice selected, using default');
+//             }
+
+//             utterance.onstart = () => setIsSpeaking(true);
+//             utterance.onend = () => setIsSpeaking(false);
+//             utterance.onerror = (e) => {
+//                 console.error('Speech error:', e);
+//                 setIsSpeaking(false);
+//             };
+
+//             window.speechSynthesis.speak(utterance);
 //         } else {
 //             console.warn('Text-to-speech not supported');
 //         }
 //     };
 
+//     const testSelectedVoice = () => {
+//         if (!selectedVoice) {
+//             setError('No voice selected');
+//             return;
+//         }
+//         speak(`Hello, I am ${selectedVoice.name}. This is how I sound.`);
+//     };
+
+//     // --- Speech Recognition setup ---
 //     useEffect(() => {
 //         if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
 //             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -55,17 +145,19 @@
 //                     }
 //                 }
 //                 if (finalTranscript) {
-//                     setTranscript(prev => prev ? prev + ' ' + finalTranscript : finalTranscript);
+//                     setTranscript(prev => (prev ? prev + ' ' + finalTranscript : finalTranscript));
 //                 }
 //             };
 
 //             recognitionRef.current.onerror = (event) => {
 //                 if (event.error === 'no-speech') {
 //                     setIsListening(false);
-//                 } else if (event.error === 'not-allowed') {
-//                     setError("Microphone access denied.");
+//                 } else if (event.error === 'not-allowed' || event.error === 'audio-capture') {
+//                     setError("Microphone access denied. Please allow microphone permissions and try again.");
+//                     setShowPermissionModal(true);
 //                     setIsListening(false);
 //                 } else {
+//                     setError(`Speech recognition error: ${event.error}`);
 //                     setIsListening(false);
 //                 }
 //             };
@@ -73,11 +165,10 @@
 //             recognitionRef.current.onend = () => {
 //                 setIsListening(false);
 //             };
-//         } else {
-//             setError("Browser does not support Speech Recognition.");
 //         }
 //     }, []);
 
+//     // Cancel speech on unmount
 //     useEffect(() => {
 //         return () => {
 //             window.speechSynthesis.cancel();
@@ -94,6 +185,7 @@
 //                 recognitionRef.current?.start();
 //                 setIsListening(true);
 //             } catch (err) {
+//                 // If already started, ignore
 //                 setIsListening(true);
 //             }
 //         }
@@ -101,10 +193,15 @@
 
 //     const handleStartInterview = async () => {
 //         if (!jobPosition.trim()) return setError("Please enter a job position.");
+//         if (!selectedResumeId) return setError("Please select a resume.");
+
 //         setLoading(true);
 //         setError('');
 //         try {
-//             const { data } = await axiosClient.post('/interview/speech/start', { jobPosition });
+//             const { data } = await axiosClient.post('/interview/speech/start', {
+//                 jobPosition,
+//                 resumeId: selectedResumeId
+//             });
 //             setConversation([{ role: 'ai', text: data.question }]);
 //             setIsStarted(true);
 //             setQuestionCount(1);
@@ -131,6 +228,7 @@
 //         try {
 //             const { data } = await axiosClient.post('/interview/speech/answer', {
 //                 jobPosition,
+//                 resumeId: selectedResumeId,
 //                 history: newHistory,
 //                 currentAnswer
 //             });
@@ -157,6 +255,7 @@
 //         try {
 //             const { data } = await axiosClient.post('/interview/speech/report', {
 //                 jobPosition,
+//                 resumeId: selectedResumeId,
 //                 history: conversation
 //             });
 //             setReport(data);
@@ -170,6 +269,21 @@
 
 //     // Helper to get the latest AI message
 //     const lastAIMessage = [...conversation].reverse().find(msg => msg.role === 'ai')?.text;
+
+//     // Voice change handler
+//     const handleVoiceChange = (e) => {
+//         const voice = voices.find(v => v.name === e.target.value);
+//         setSelectedVoice(voice);
+//         if (voice) {
+//             localStorage.setItem('preferredVoice', voice.name);
+//         }
+//     };
+
+//     const retryMicrophone = () => {
+//         setShowPermissionModal(false);
+//         setError('');
+//         toggleListening();
+//     };
 
 //     // Report view
 //     if (report) {
@@ -187,10 +301,11 @@
 //                             {report.confidenceLevel && (
 //                                 <div className="flex items-center gap-2">
 //                                     <span className="text-sm text-gray-600">Confidence:</span>
-//                                     <span className={`px-3 py-1 rounded-full text-sm font-semibold ${report.confidenceLevel === 'High' ? 'bg-green-100 text-green-700' :
+//                                     <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
+//                                         report.confidenceLevel === 'High' ? 'bg-green-100 text-green-700' :
 //                                         report.confidenceLevel === 'Medium' ? 'bg-yellow-100 text-yellow-700' :
-//                                             'bg-red-100 text-red-700'
-//                                         }`}>
+//                                         'bg-red-100 text-red-700'
+//                                     }`}>
 //                                         {report.confidenceLevel}
 //                                     </span>
 //                                 </div>
@@ -223,7 +338,7 @@
 //                     <div className="bg-white p-6 rounded-xl shadow-md border-t-4 border-yellow-400">
 //                         <h4 className="font-bold text-lg mb-4">Improvement Tips</h4>
 //                         <ul className="space-y-2">
-//                             {report.improvementTips.map((tip, i) => (
+//                             {report.improvementTips?.map((tip, i) => (
 //                                 <li key={i} className="flex gap-2 items-start text-gray-700">
 //                                     <span className="text-yellow-500 font-bold">•</span>
 //                                     {tip}
@@ -242,22 +357,93 @@
 //     return (
 //         <div className="w-full h-full flex flex-col">
 //             {/* Header */}
-//             <div className="bg-white border-b border-gray-200 p-4 shadow-sm flex justify-between items-center shrink-0">
+//             <div className="bg-white border-b border-gray-200 p-4 shadow-sm flex flex-wrap items-center justify-between gap-4 shrink-0">
 //                 <div>
 //                     <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2"><Mic className="text-red-500" /> Speech Mock Interview</h2>
 //                     <p className="text-sm text-gray-500">Practice verbal answers with real-time AI feedback</p>
 //                 </div>
-//                 {isStarted && (
-//                     <button onClick={handleGenerateReport} disabled={loading || conversation.length < 4} className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition text-sm font-medium">
-//                         End & Generate Report
-//                     </button>
-//                 )}
+//                 <div className="flex items-center gap-4">
+//                     {/* Voice Selector Dropdown - Hidden after interview starts */}
+//                     {!isStarted && voices.length > 0 && (
+//                         <div className="flex items-center gap-2">
+//                             <label htmlFor="voiceSelect" className="text-sm text-gray-600 whitespace-nowrap">AI Voice:</label>
+//                             <select
+//                                 id="voiceSelect"
+//                                 value={selectedVoice ? selectedVoice.name : ''}
+//                                 onChange={handleVoiceChange}
+//                                 className="px-2 py-1 border rounded text-sm bg-white"
+//                             >
+//                                 {voices.map(voice => (
+//                                     <option key={voice.name} value={voice.name}>
+//                                         {voice.name} ({voice.lang})
+//                                     </option>
+//                                 ))}
+//                             </select>
+//                             {/* Test Voice Button */}
+//                             <button
+//                                 onClick={testSelectedVoice}
+//                                 disabled={!selectedVoice || isSpeaking}
+//                                 className="p-1.5 bg-indigo-100 text-indigo-700 rounded hover:bg-indigo-200 disabled:opacity-50"
+//                                 title="Test selected voice"
+//                             >
+//                                 <Speaker size={18} />
+//                             </button>
+//                         </div>
+//                     )}
+//                     {isStarted && (
+//                         <button
+//                             onClick={handleGenerateReport}
+//                             disabled={loading || conversation.length < 4}
+//                             className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition text-sm font-medium"
+//                         >
+//                             End & Generate Report
+//                         </button>
+//                     )}
+//                 </div>
 //             </div>
 
 //             {/* Error Banner */}
-//             {error && (
+//             {error && !showPermissionModal && (
 //                 <div className="bg-red-100 text-red-700 p-3 text-center text-sm font-medium">
 //                     {error}
+//                 </div>
+//             )}
+
+//             {/* Microphone Permission Modal - Simplified */}
+//             {showPermissionModal && (
+//                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+//                     <div className="bg-white rounded-xl max-w-md w-full p-6 shadow-2xl border-t-4 border-red-500">
+//                         <div className="flex items-center gap-3 mb-4">
+//                             <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
+//                                 <MicOff size={24} className="text-red-600" />
+//                             </div>
+//                             <h3 className="text-xl font-bold text-gray-900">Microphone Access Denied</h3>
+//                         </div>
+                        
+//                         <div className="mb-6">
+//                             <p className="text-gray-700 font-medium mb-2">
+//                                 ⚠️ Without microphone access, the interview cannot be conducted.
+//                             </p>
+//                             <p className="text-gray-600 text-sm">
+//                                 Please allow microphone permission in your browser settings and click Retry.
+//                             </p>
+//                         </div>
+
+//                         <div className="flex gap-3 justify-end">
+//                             <button
+//                                 onClick={() => setShowPermissionModal(false)}
+//                                 className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 font-medium"
+//                             >
+//                                 Cancel
+//                             </button>
+//                             <button
+//                                 onClick={retryMicrophone}
+//                                 className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium flex items-center gap-2"
+//                             >
+//                                 <Mic size={18} /> Retry
+//                             </button>
+//                         </div>
+//                     </div>
 //                 </div>
 //             )}
 
@@ -269,7 +455,32 @@
 //                             <Mic size={40} className="text-indigo-600" />
 //                         </div>
 //                         <h3 className="text-xl font-bold text-gray-800">Ready to speak?</h3>
-//                         <p className="text-gray-600">Enter the job role you want to practice for. The AI will interview you via voice.</p>
+//                         <p className="text-gray-600">Select a resume and enter the job role you want to practice for. The AI will interview you based on your background.</p>
+                        
+//                         {/* Resume Dropdown */}
+//                         <div className="text-left">
+//                             <label className="block text-sm font-medium text-gray-700 mb-1">Select Resume</label>
+//                             {fetchingResumes ? (
+//                                 <div className="text-center py-2">Loading resumes...</div>
+//                             ) : resumes.length === 0 ? (
+//                                 <div className="text-red-500 text-sm">No resumes found. Please upload a resume first.</div>
+//                             ) : (
+//                                 <select
+//                                     className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
+//                                     value={selectedResumeId}
+//                                     onChange={(e) => setSelectedResumeId(e.target.value)}
+//                                 >
+//                                     <option value="" disabled>-- Select a Resume --</option>
+//                                     {resumes.map(r => (
+//                                         <option key={r._id} value={r._id}>
+//                                             {r.fileName} - {new Date(r.createdAt).toLocaleDateString()}
+//                                         </option>
+//                                     ))}
+//                                 </select>
+//                             )}
+//                         </div>
+
+//                         {/* Job Position Input */}
 //                         <input
 //                             type="text"
 //                             className="w-full p-4 border rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none text-center text-lg shadow-sm"
@@ -277,9 +488,10 @@
 //                             value={jobPosition}
 //                             onChange={(e) => setJobPosition(e.target.value)}
 //                         />
+
 //                         <button
 //                             onClick={handleStartInterview}
-//                             disabled={loading || !jobPosition}
+//                             disabled={loading || !jobPosition || !selectedResumeId || resumes.length === 0}
 //                             className="w-full py-4 bg-[#22424e] text-white rounded-xl font-bold text-lg hover:bg-[#4e2e22] transition-transform active:scale-95 disabled:opacity-50 disabled:scale-100 shadow-lg"
 //                         >
 //                             {loading ? 'Generating Interview...' : 'Start Interview'}
@@ -288,7 +500,7 @@
 //                     </div>
 //                 </div>
 //             ) : (
-//                 /* Voice-Only Interview Area */
+//                 /* Voice-Only Interview Area with Organic Waveform */
 //                 <div className="flex-1 flex flex-col overflow-hidden max-w-4xl mx-auto w-full my-4">
 //                     {/* Voice Visualization Center Stage */}
 //                     <div className="flex-1 flex flex-col items-center justify-center p-8 space-y-8">
@@ -300,16 +512,33 @@
 //                             </h3>
 //                         </div>
 
-//                         {/* Visualization Area */}
-//                         <div className="relative w-full max-w-md h-64 flex items-center justify-center">
-//                             {/* AI Speaking Animation */}
+//                         {/* Visualization Area with Organic Waveform */}
+//                         <div className="relative w-full max-w-md flex flex-col items-center justify-center">
+//                             {/* AI Speaking Animation with Organic Waveform */}
 //                             {isSpeaking && (
-//                                 <img
-//                                     src={stareImage}
-//                                     alt="AI Speaking"
-//                                     className="w-48 h-48 object-cover rounded-full animate-pulse drop-shadow-xl"
-//                                 />
+//                                 <>
+//                                     <img
+//                                         src={stareImage}
+//                                         alt="AI Speaking"
+//                                         className="w-48 h-48 object-cover rounded-full animate-pulse drop-shadow-xl"
+//                                     />
+//                                     {/* Organic Waveform Bars - Expanded and Cascading */}
+//                                     <div className="mt-4 flex items-center justify-center gap-2 h-16">
+//                                         {barHeights.map((height, i) => (
+//                                             <div
+//                                                 key={i}
+//                                                 className="w-4 bg-indigo-600 rounded-full animate-wave-organic"
+//                                                 style={{
+//                                                     animationDelay: `${i * 0.05}s`,
+//                                                     animationDuration: `${0.8 + (i * 0.1)}s`,
+//                                                     height: `${height}rem`,
+//                                                 }}
+//                                             />
+//                                         ))}
+//                                     </div>
+//                                 </>
 //                             )}
+                            
 //                             {/* User Listening Animation */}
 //                             {isListening && !isSpeaking && (
 //                                 <div className="relative">
@@ -319,12 +548,14 @@
 //                                     </div>
 //                                 </div>
 //                             )}
+                            
 //                             {/* Idle State */}
 //                             {!isSpeaking && !isListening && !loading && (
 //                                 <div className="w-32 h-32 bg-gray-200 rounded-full flex items-center justify-center shadow-lg">
 //                                     <Mic size={64} className="text-gray-500" />
 //                                 </div>
 //                             )}
+                            
 //                             {/* Loading State */}
 //                             {loading && !isSpeaking && (
 //                                 <div className="w-32 h-32 bg-indigo-100 rounded-full flex items-center justify-center shadow-lg animate-pulse">
@@ -333,7 +564,7 @@
 //                             )}
 //                         </div>
 
-//                         {/* NEW: Bot Message Display */}
+//                         {/* Bot Message Display */}
 //                         {lastAIMessage && (
 //                             <div className="mt-4 p-4 bg-white rounded-lg shadow-md border border-gray-200 max-w-md w-full">
 //                                 <div className="flex items-start gap-2">
@@ -349,10 +580,11 @@
 //                             <button
 //                                 onClick={toggleListening}
 //                                 disabled={isSpeaking || loading}
-//                                 className={`w-20 h-20 rounded-full transition-all shadow-xl ${isListening
-//                                     ? 'bg-red-500 text-white scale-110'
-//                                     : 'bg-white text-gray-700 border-4 border-gray-300 hover:border-indigo-500'
-//                                     } disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center`}
+//                                 className={`w-20 h-20 rounded-full transition-all shadow-xl ${
+//                                     isListening
+//                                         ? 'bg-red-500 text-white scale-110'
+//                                         : 'bg-white text-gray-700 border-4 border-gray-300 hover:border-indigo-500'
+//                                 } disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center`}
 //                                 title={isListening ? "Stop Recording" : "Start Recording"}
 //                             >
 //                                 {isListening ? <MicOff size={32} /> : <Mic size={32} />}
@@ -376,20 +608,41 @@
 //                     </div>
 //                 </div>
 //             )}
+
+//             {/* Waveform Animation CSS - Organic Style */}
+//             <style jsx>{`
+//                 @keyframes wave-organic {
+//                     0%, 100% { transform: scaleY(0.3); }
+//                     20% { transform: scaleY(1.0); }
+//                     40% { transform: scaleY(1.6); }
+//                     60% { transform: scaleY(1.2); }
+//                     80% { transform: scaleY(0.7); }
+//                 }
+//                 .animate-wave-organic {
+//                     animation: wave-organic 1.2s infinite alternate ease-in-out;
+//                     transform-origin: center;
+//                 }
+//             `}</style>
 //         </div>
 //     );
 // };
 
 // export default SpeechTest;
 
+// //===============================================================================
+
 import { useState, useEffect, useRef } from 'react';
-import { Mic, MicOff, Send, FileText, CheckCircle, AlertCircle, Volume2, Speaker } from 'lucide-react';
+import { Mic, MicOff, Send, FileText, CheckCircle, AlertCircle, Volume2, Speaker, X } from 'lucide-react';
 import axiosClient from '../../api/axiosClient';
+import { getResumes } from '../../api/resumeApi';
 import stareImage from '../../assets/stare.png';
 
 const SpeechTest = () => {
     // State
     const [jobPosition, setJobPosition] = useState('');
+    const [resumes, setResumes] = useState([]);
+    const [selectedResumeId, setSelectedResumeId] = useState('');
+    const [fetchingResumes, setFetchingResumes] = useState(true);
     const [isStarted, setIsStarted] = useState(false);
     const [isListening, setIsListening] = useState(false);
     const [isSpeaking, setIsSpeaking] = useState(false);
@@ -398,15 +651,19 @@ const SpeechTest = () => {
     const [loading, setLoading] = useState(false);
     const [report, setReport] = useState(null);
     const [error, setError] = useState('');
+    const [showPermissionModal, setShowPermissionModal] = useState(false);
     const [questionCount, setQuestionCount] = useState(0);
 
     // Voice state
     const [voices, setVoices] = useState([]);
     const [selectedVoice, setSelectedVoice] = useState(null);
-    const selectedVoiceRef = useRef(null); // Keep latest voice in ref for speak function
+    const selectedVoiceRef = useRef(null);
 
     // Refs
     const recognitionRef = useRef(null);
+
+    // Waveform bar heights (symmetrical: ends low, middle high)
+    const barHeights = [1.2, 1.6, 2.0, 2.4, 2.8, 2.4, 2.0, 1.6, 1.2]; // in rem
 
     // --- Load available voices ---
     useEffect(() => {
@@ -415,7 +672,6 @@ const SpeechTest = () => {
             console.log('Available voices:', availableVoices);
             setVoices(availableVoices);
 
-            // Try to load previously selected voice from localStorage
             const savedVoiceName = localStorage.getItem('preferredVoice');
             if (savedVoiceName) {
                 const savedVoice = availableVoices.find(v => v.name === savedVoiceName);
@@ -425,13 +681,11 @@ const SpeechTest = () => {
                     return;
                 }
             }
-            // Default to first English voice or any voice
             const defaultVoice = availableVoices.find(v => v.lang.includes('en-')) || availableVoices[0];
             setSelectedVoice(defaultVoice || null);
             selectedVoiceRef.current = defaultVoice || null;
         };
 
-        // Voices might already be loaded
         if (window.speechSynthesis.getVoices().length) {
             loadVoices();
         } else {
@@ -448,7 +702,24 @@ const SpeechTest = () => {
         selectedVoiceRef.current = selectedVoice;
     }, [selectedVoice]);
 
-    // --- Text-to-Speech with selected voice (using ref to avoid stale closure) ---
+    // --- Fetch resumes on mount ---
+    useEffect(() => {
+        const fetchResumes = async () => {
+            try {
+                const { data } = await getResumes();
+                setResumes(data);
+                if (data.length > 0) setSelectedResumeId(data[0]._id);
+            } catch (err) {
+                console.error("Failed to fetch resumes:", err);
+                setError("Could not load your resumes. Please try again.");
+            } finally {
+                setFetchingResumes(false);
+            }
+        };
+        fetchResumes();
+    }, []);
+
+    // --- Text-to-Speech with selected voice ---
     const speak = (text) => {
         if ('speechSynthesis' in window) {
             window.speechSynthesis.cancel();
@@ -458,7 +729,6 @@ const SpeechTest = () => {
             utterance.rate = 1;
             utterance.pitch = 1;
 
-            // Use the voice from ref (always latest)
             const voiceToUse = selectedVoiceRef.current;
             if (voiceToUse) {
                 utterance.voice = voiceToUse;
@@ -480,7 +750,6 @@ const SpeechTest = () => {
         }
     };
 
-    // --- Test voice function ---
     const testSelectedVoice = () => {
         if (!selectedVoice) {
             setError('No voice selected');
@@ -509,17 +778,19 @@ const SpeechTest = () => {
                     }
                 }
                 if (finalTranscript) {
-                    setTranscript(prev => prev ? prev + ' ' + finalTranscript : finalTranscript);
+                    setTranscript(prev => (prev ? prev + ' ' + finalTranscript : finalTranscript));
                 }
             };
 
             recognitionRef.current.onerror = (event) => {
                 if (event.error === 'no-speech') {
                     setIsListening(false);
-                } else if (event.error === 'not-allowed') {
-                    setError("Microphone access denied.");
+                } else if (event.error === 'not-allowed' || event.error === 'audio-capture') {
+                    setError("Microphone access denied. Please allow microphone permissions and try again.");
+                    setShowPermissionModal(true);
                     setIsListening(false);
                 } else {
+                    setError(`Speech recognition error: ${event.error}`);
                     setIsListening(false);
                 }
             };
@@ -527,8 +798,6 @@ const SpeechTest = () => {
             recognitionRef.current.onend = () => {
                 setIsListening(false);
             };
-        } else {
-            setError("Browser does not support Speech Recognition.");
         }
     }, []);
 
@@ -549,6 +818,7 @@ const SpeechTest = () => {
                 recognitionRef.current?.start();
                 setIsListening(true);
             } catch (err) {
+                // If already started, ignore
                 setIsListening(true);
             }
         }
@@ -556,10 +826,15 @@ const SpeechTest = () => {
 
     const handleStartInterview = async () => {
         if (!jobPosition.trim()) return setError("Please enter a job position.");
+        if (!selectedResumeId) return setError("Please select a resume.");
+
         setLoading(true);
         setError('');
         try {
-            const { data } = await axiosClient.post('/interview/speech/start', { jobPosition });
+            const { data } = await axiosClient.post('/interview/speech/start', {
+                jobPosition,
+                resumeId: selectedResumeId
+            });
             setConversation([{ role: 'ai', text: data.question }]);
             setIsStarted(true);
             setQuestionCount(1);
@@ -586,6 +861,7 @@ const SpeechTest = () => {
         try {
             const { data } = await axiosClient.post('/interview/speech/answer', {
                 jobPosition,
+                resumeId: selectedResumeId,
                 history: newHistory,
                 currentAnswer
             });
@@ -612,6 +888,7 @@ const SpeechTest = () => {
         try {
             const { data } = await axiosClient.post('/interview/speech/report', {
                 jobPosition,
+                resumeId: selectedResumeId,
                 history: conversation
             });
             setReport(data);
@@ -633,6 +910,12 @@ const SpeechTest = () => {
         if (voice) {
             localStorage.setItem('preferredVoice', voice.name);
         }
+    };
+
+    const retryMicrophone = () => {
+        setShowPermissionModal(false);
+        setError('');
+        toggleListening();
     };
 
     // Report view
@@ -688,7 +971,7 @@ const SpeechTest = () => {
                     <div className="bg-white p-6 rounded-xl shadow-md border-t-4 border-yellow-400">
                         <h4 className="font-bold text-lg mb-4">Improvement Tips</h4>
                         <ul className="space-y-2">
-                            {report.improvementTips.map((tip, i) => (
+                            {report.improvementTips?.map((tip, i) => (
                                 <li key={i} className="flex gap-2 items-start text-gray-700">
                                     <span className="text-yellow-500 font-bold">•</span>
                                     {tip}
@@ -706,22 +989,22 @@ const SpeechTest = () => {
 
     return (
         <div className="w-full h-full flex flex-col">
-            {/* Header */}
+            {/* Header with wider voice selector */}
             <div className="bg-white border-b border-gray-200 p-4 shadow-sm flex flex-wrap items-center justify-between gap-4 shrink-0">
                 <div>
                     <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2"><Mic className="text-red-500" /> Speech Mock Interview</h2>
                     <p className="text-sm text-gray-500">Practice verbal answers with real-time AI feedback</p>
                 </div>
                 <div className="flex items-center gap-4">
-                    {/* Voice Selector Dropdown */}
-                    {voices.length > 0 && (
+                    {/* Voice Selector Dropdown - Hidden after interview starts */}
+                    {!isStarted && voices.length > 0 && (
                         <div className="flex items-center gap-2">
-                            <label htmlFor="voiceSelect" className="text-sm text-gray-600 whitespace-nowrap">AI Voice:</label>
+                            <label htmlFor="voiceSelect" className="text-sm font-medium text-gray-700 whitespace-nowrap">AI Voice:</label>
                             <select
                                 id="voiceSelect"
                                 value={selectedVoice ? selectedVoice.name : ''}
                                 onChange={handleVoiceChange}
-                                className="px-2 py-1 border rounded text-sm bg-white"
+                                className="w-48 px-2 py-1.5 border border-gray-300 rounded-md bg-white shadow-sm text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                             >
                                 {voices.map(voice => (
                                     <option key={voice.name} value={voice.name}>
@@ -733,7 +1016,7 @@ const SpeechTest = () => {
                             <button
                                 onClick={testSelectedVoice}
                                 disabled={!selectedVoice || isSpeaking}
-                                className="p-1.5 bg-indigo-100 text-indigo-700 rounded hover:bg-indigo-200 disabled:opacity-50"
+                                className="p-1.5 bg-indigo-50 text-indigo-700 rounded-md hover:bg-indigo-100 disabled:opacity-50 transition border border-indigo-200"
                                 title="Test selected voice"
                             >
                                 <Speaker size={18} />
@@ -744,7 +1027,7 @@ const SpeechTest = () => {
                         <button
                             onClick={handleGenerateReport}
                             disabled={loading || conversation.length < 4}
-                            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition text-sm font-medium"
+                            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition text-sm font-medium shadow-sm"
                         >
                             End & Generate Report
                         </button>
@@ -753,9 +1036,47 @@ const SpeechTest = () => {
             </div>
 
             {/* Error Banner */}
-            {error && (
+            {error && !showPermissionModal && (
                 <div className="bg-red-100 text-red-700 p-3 text-center text-sm font-medium">
                     {error}
+                </div>
+            )}
+
+            {/* Microphone Permission Modal - Simplified */}
+            {showPermissionModal && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                    <div className="bg-white rounded-xl max-w-md w-full p-6 shadow-2xl border-t-4 border-red-500">
+                        <div className="flex items-center gap-3 mb-4">
+                            <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
+                                <MicOff size={24} className="text-red-600" />
+                            </div>
+                            <h3 className="text-xl font-bold text-gray-900">Microphone Access Denied</h3>
+                        </div>
+                        
+                        <div className="mb-6">
+                            <p className="text-gray-700 font-medium mb-2">
+                                ⚠️ Without microphone access, the interview cannot be conducted.
+                            </p>
+                            <p className="text-gray-600 text-sm">
+                                Please allow microphone permission in your browser settings and click Retry.
+                            </p>
+                        </div>
+
+                        <div className="flex gap-3 justify-end">
+                            <button
+                                onClick={() => setShowPermissionModal(false)}
+                                className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 font-medium"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={retryMicrophone}
+                                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium flex items-center gap-2"
+                            >
+                                <Mic size={18} /> Retry
+                            </button>
+                        </div>
+                    </div>
                 </div>
             )}
 
@@ -767,7 +1088,32 @@ const SpeechTest = () => {
                             <Mic size={40} className="text-indigo-600" />
                         </div>
                         <h3 className="text-xl font-bold text-gray-800">Ready to speak?</h3>
-                        <p className="text-gray-600">Enter the job role you want to practice for. The AI will interview you via voice.</p>
+                        <p className="text-gray-600">Select a resume and enter the job role you want to practice for. The AI will interview you based on your background.</p>
+                        
+                        {/* Resume Dropdown */}
+                        <div className="text-left">
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Select Resume</label>
+                            {fetchingResumes ? (
+                                <div className="text-center py-2">Loading resumes...</div>
+                            ) : resumes.length === 0 ? (
+                                <div className="text-red-500 text-sm">No resumes found. Please upload a resume first.</div>
+                            ) : (
+                                <select
+                                    className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
+                                    value={selectedResumeId}
+                                    onChange={(e) => setSelectedResumeId(e.target.value)}
+                                >
+                                    <option value="" disabled>-- Select a Resume --</option>
+                                    {resumes.map(r => (
+                                        <option key={r._id} value={r._id}>
+                                            {r.fileName} - {new Date(r.createdAt).toLocaleDateString()}
+                                        </option>
+                                    ))}
+                                </select>
+                            )}
+                        </div>
+
+                        {/* Job Position Input */}
                         <input
                             type="text"
                             className="w-full p-4 border rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none text-center text-lg shadow-sm"
@@ -775,9 +1121,10 @@ const SpeechTest = () => {
                             value={jobPosition}
                             onChange={(e) => setJobPosition(e.target.value)}
                         />
+
                         <button
                             onClick={handleStartInterview}
-                            disabled={loading || !jobPosition}
+                            disabled={loading || !jobPosition || !selectedResumeId || resumes.length === 0}
                             className="w-full py-4 bg-[#22424e] text-white rounded-xl font-bold text-lg hover:bg-[#4e2e22] transition-transform active:scale-95 disabled:opacity-50 disabled:scale-100 shadow-lg"
                         >
                             {loading ? 'Generating Interview...' : 'Start Interview'}
@@ -786,7 +1133,7 @@ const SpeechTest = () => {
                     </div>
                 </div>
             ) : (
-                /* Voice-Only Interview Area */
+                /* Voice-Only Interview Area with Organic Waveform */
                 <div className="flex-1 flex flex-col overflow-hidden max-w-4xl mx-auto w-full my-4">
                     {/* Voice Visualization Center Stage */}
                     <div className="flex-1 flex flex-col items-center justify-center p-8 space-y-8">
@@ -798,16 +1145,33 @@ const SpeechTest = () => {
                             </h3>
                         </div>
 
-                        {/* Visualization Area */}
-                        <div className="relative w-full max-w-md h-64 flex items-center justify-center">
-                            {/* AI Speaking Animation */}
+                        {/* Visualization Area with Organic Waveform */}
+                        <div className="relative w-full max-w-md flex flex-col items-center justify-center">
+                            {/* AI Speaking Animation with Organic Waveform */}
                             {isSpeaking && (
-                                <img
-                                    src={stareImage}
-                                    alt="AI Speaking"
-                                    className="w-48 h-48 object-cover rounded-full animate-pulse drop-shadow-xl"
-                                />
+                                <>
+                                    <img
+                                        src={stareImage}
+                                        alt="AI Speaking"
+                                        className="w-48 h-48 object-cover rounded-full animate-pulse drop-shadow-xl"
+                                    />
+                                    {/* Organic Waveform Bars - Expanded and Cascading */}
+                                    <div className="mt-4 flex items-center justify-center gap-2 h-16">
+                                        {barHeights.map((height, i) => (
+                                            <div
+                                                key={i}
+                                                className="w-4 bg-indigo-600 rounded-full animate-wave-organic"
+                                                style={{
+                                                    animationDelay: `${i * 0.05}s`,
+                                                    animationDuration: `${0.8 + (i * 0.1)}s`,
+                                                    height: `${height}rem`,
+                                                }}
+                                            />
+                                        ))}
+                                    </div>
+                                </>
                             )}
+                            
                             {/* User Listening Animation */}
                             {isListening && !isSpeaking && (
                                 <div className="relative">
@@ -817,12 +1181,14 @@ const SpeechTest = () => {
                                     </div>
                                 </div>
                             )}
+                            
                             {/* Idle State */}
                             {!isSpeaking && !isListening && !loading && (
                                 <div className="w-32 h-32 bg-gray-200 rounded-full flex items-center justify-center shadow-lg">
                                     <Mic size={64} className="text-gray-500" />
                                 </div>
                             )}
+                            
                             {/* Loading State */}
                             {loading && !isSpeaking && (
                                 <div className="w-32 h-32 bg-indigo-100 rounded-full flex items-center justify-center shadow-lg animate-pulse">
@@ -875,6 +1241,21 @@ const SpeechTest = () => {
                     </div>
                 </div>
             )}
+
+            {/* Waveform Animation CSS - Organic Style */}
+            <style jsx>{`
+                @keyframes wave-organic {
+                    0%, 100% { transform: scaleY(0.3); }
+                    20% { transform: scaleY(1.0); }
+                    40% { transform: scaleY(1.6); }
+                    60% { transform: scaleY(1.2); }
+                    80% { transform: scaleY(0.7); }
+                }
+                .animate-wave-organic {
+                    animation: wave-organic 1.2s infinite alternate ease-in-out;
+                    transform-origin: center;
+                }
+            `}</style>
         </div>
     );
 };

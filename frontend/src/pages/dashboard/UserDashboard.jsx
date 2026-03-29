@@ -89,12 +89,10 @@ const UserDashboard = () => {
         { id: 'optimizer', label: 'Resume Upload', icon: FileText },
         { id: 'build', label: 'Build Resume', icon: PenTool },
         { id: 'speech-test', label: 'Mock Interview', icon: Mic2 },
-
         { id: 'courses', label: 'Guidance', icon: Award },
         { id: 'interview', label: 'Mock Test', icon: MessageSquare },
         { id: 'history', label: 'History', icon: History },
     ];
-
     return (
         <div className="flex min-h-screen overflow-hidden bg-gray-100 font-sans">
             {/* Left Sidebar - 30% */}
@@ -135,7 +133,6 @@ const UserDashboard = () => {
                         );
                     })}
                 </nav>
-
                 {/* Footer: Profile & Logout */}
                 <div className="p-4 border-t border-gray-600 bg-black/10">
                     <div className="flex items-center gap-2">
@@ -150,7 +147,6 @@ const UserDashboard = () => {
                             </div>
                             <span className="font-medium text-gray-200">{user?.name || 'User Profile'}</span>
                         </button>
-
                         {/* Logout Button - 30% width */}
                         <button
                             onClick={handleLogout}
@@ -187,5 +183,4 @@ const UserDashboard = () => {
         </div>
     );
 };
-
 export default UserDashboard;

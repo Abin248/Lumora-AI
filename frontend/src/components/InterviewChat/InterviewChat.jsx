@@ -1,32 +1,37 @@
 import { useState, useRef, useEffect } from 'react';
 import { chatInterview } from '../../api/interviewApi';
-import { Send, User, Bot } from 'lucide-react';
+import { Bot } from 'lucide-react';
 
 const InterviewChat = () => {
+
     const [messages, setMessages] = useState([]);
-    const [input, setInput] = useState('');
     const [jobDescription, setJobDescription] = useState('');
     const [started, setStarted] = useState(false);
     const [interviewId, setInterviewId] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [selectedOption, setSelectedOption] = useState(null);
+
     const messagesEndRef = useRef(null);
 
-    const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    };
-
     useEffect(() => {
-        scrollToBottom();
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages]);
 
+    // =============================
+    // START INTERVIEW
+    // =============================
     const startInterview = async () => {
         if (!jobDescription) return;
+
         setLoading(true);
+
         try {
             const { data } = await chatInterview({ jobDescription });
+
             setInterviewId(data.interviewId);
-            setMessages(data.history.filter(m => m.role !== 'system')); // Hide system prompt
+            setMessages(data.history.filter(m => m.role !== 'system'));
             setStarted(true);
+
         } catch (error) {
             console.error(error);
         } finally {
@@ -34,21 +39,23 @@ const InterviewChat = () => {
         }
     };
 
-    const sendMessage = async (e) => {
-        e.preventDefault();
-        if (!input.trim()) return;
+    // =============================
+    // SUBMIT OPTION
+    // =============================
+    const sendSelectedOption = async () => {
+        if (!selectedOption) return;
 
-        const userMsg = { role: 'user', content: input };
-        setMessages(prev => [...prev, userMsg]);
-        setInput('');
         setLoading(true);
 
         try {
             const { data } = await chatInterview({
                 interviewId,
-                message: userMsg.content
+                message: selectedOption
             });
+
             setMessages(data.history.filter(m => m.role !== 'system'));
+            setSelectedOption(null);
+
         } catch (error) {
             console.error(error);
         } finally {
@@ -56,20 +63,119 @@ const InterviewChat = () => {
         }
     };
 
+    // =============================
+    // FIND LAST QUESTION INDEX
+    // =============================
+    const getLastQuestionIndex = () => {
+        let lastIndex = -1;
+
+        messages.forEach((msg, index) => {
+            if (
+                msg.role === 'assistant' &&
+                msg.content.includes("A)") &&
+                msg.content.includes("Correct Answer")
+            ) {
+                lastIndex = index;
+            }
+        });
+
+        return lastIndex;
+    };
+
+    const lastQuestionIndex = getLastQuestionIndex();
+
+    // =============================
+    // RENDER MESSAGE
+    // =============================
+    const renderMessage = (msg, index) => {
+
+        if (msg.role === 'assistant') {
+
+            if (msg.content.includes("A)") && msg.content.includes("Correct Answer")) {
+
+                const isActiveQuestion = index === lastQuestionIndex;
+
+                const questionMatch = msg.content.match(/Q\d+:[\s\S]*?(?=\nA\))/);
+                const questionText = questionMatch ? questionMatch[0] : '';
+
+                const optionRegex = /([A-D])\)\s*(.*)/g;
+                let match;
+                const options = [];
+
+                while ((match = optionRegex.exec(msg.content)) !== null) {
+                    if (match[2].includes("Correct Answer")) break;
+
+                    options.push({
+                        letter: match[1],
+                        text: match[2].trim()
+                    });
+
+                    if (options.length === 4) break;
+                }
+
+                return (
+                    <div className="flex flex-col gap-3">
+                        <div className="font-medium text-base whitespace-pre-wrap">
+                            {questionText}
+                        </div>
+
+                        {options.map((opt, i) => (
+                            <button
+                                key={i}
+                                onClick={() => isActiveQuestion && setSelectedOption(opt.letter)}
+                                disabled={!isActiveQuestion}
+                                className={`border rounded-md p-3 text-left transition text-base ${
+                                    selectedOption === opt.letter && isActiveQuestion
+                                        ? "bg-primary text-white"
+                                        : "bg-white hover:bg-gray-100"
+                                } ${
+                                    !isActiveQuestion
+                                        ? "opacity-60 cursor-not-allowed"
+                                        : ""
+                                }`}
+                            >
+                                <strong>{opt.letter})</strong> {opt.text}
+                            </button>
+                        ))}
+
+                        {isActiveQuestion && (
+                            <button
+                                onClick={sendSelectedOption}
+                                disabled={!selectedOption}
+                                className="bg-green-600 text-white py-2 px-4 rounded-md text-base mt-2 hover:bg-green-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+                            >
+                                Submit Answer
+                            </button>
+                        )}
+                    </div>
+                );
+            }
+
+            return <div className="whitespace-pre-wrap text-base">{msg.content}</div>;
+        }
+
+        return <div className="text-base">{msg.content}</div>;
+    };
+
+    // =============================
+    // UI
+    // =============================
     if (!started) {
         return (
-            <div className="bg-white rounded-lg shadow-md p-6">
-                <h2 className="text-xl font-bold mb-4">Start New Session</h2>
+            <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 bg-gray-50">
+                <h2 className="text-lg font-bold text-gray-800 mb-4">Start New Session</h2>
+
                 <textarea
-                    className="w-full border border-gray-300 rounded-md p-3 mb-4 h-32 focus:ring-primary focus:border-primary"
-                    placeholder="Paste the Job Description here..."
+                    className="w-full border border-gray-300 rounded-md p-4 mb-5 h-36 text-base"
+                    placeholder="Paste Job Description..."
                     value={jobDescription}
                     onChange={(e) => setJobDescription(e.target.value)}
                 />
+
                 <button
                     onClick={startInterview}
                     disabled={!jobDescription || loading}
-                    className="w-full bg-primary text-white py-2 rounded-md hover:bg-indigo-700 disabled:bg-gray-400"
+                    className="w-full bg-primary text-white py-3 rounded-md text-base font-medium hover:bg-indigo-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
                 >
                     {loading ? 'Starting...' : 'Start Interview'}
                 </button>
@@ -78,79 +184,27 @@ const InterviewChat = () => {
     }
 
     return (
-        <div className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col h-[900px]">
-            <div className="bg-gray-100 p-4 border-b border-gray-200">
-                <h3 className="font-bold text-gray-700">Interview in Progress</h3>
-            </div>
-
-            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+        <div className="border border-gray-200 rounded-lg shadow-sm flex flex-col h-[650px] bg-white">
+            <div className="flex-1 overflow-y-auto p-5 space-y-5">
                 {messages.map((msg, idx) => (
-                    <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                        <div className={`max-w-[80%] rounded-lg p-3 flex gap-3 ${msg.role === 'user' ? 'bg-primary text-white' : 'bg-gray-100 text-gray-800'
-                            }`}>
-                            <div className="mt-1">
-                                {msg.role === 'user' ? <User size={18} /> : <Bot size={18} />}
-                            </div>
-                            <div>
-                                {msg.role === 'user' ? (
-                                    <div className="whitespace-pre-wrap">{msg.content}</div>
-                                ) : (
-                                    (() => {
-                                        // Detect pattern: Feedback followed by "Q<number>:"
-                                        // We use [\s\S]* to match across newlines
-                                        const match = msg.content.match(/^(.*?)(Q\d+:[\s\S]*)$/);
-
-                                        if (match) {
-                                            const feedback = match[1].trim();
-                                            const question = match[2].trim();
-
-                                            return (
-                                                <div className="flex flex-col gap-2 w-full">
-                                                    {feedback && (
-                                                        <div className="whitespace-pre-wrap text-gray-700 bg-white/50 p-2 rounded">
-                                                            {feedback}
-                                                        </div>
-                                                    )}
-                                                    <div className={`whitespace-pre-wrap font-medium ${feedback ? 'border-t border-gray-300 pt-2 mt-1' : ''}`}>
-                                                        {question}
-                                                    </div>
-                                                </div>
-                                            );
-                                        }
-                                        return <div className="whitespace-pre-wrap">{msg.content}</div>;
-                                    })()
-                                )}
+                    <div key={idx} className="flex justify-start">
+                        <div className="max-w-[80%] rounded-lg p-4 bg-gray-100 text-gray-800 text-base">
+                            <div className="flex gap-2 items-start">
+                                <Bot size={20} className="mt-0.5 flex-shrink-0" />
+                                <div className="w-full">
+                                    {renderMessage(msg, idx)}
+                                </div>
                             </div>
                         </div>
                     </div>
                 ))}
+
                 {loading && (
-                    <div className="flex justify-start">
-                        <div className="bg-gray-100 text-gray-500 rounded-lg p-3 italic">
-                            AI is thinking...
-                        </div>
-                    </div>
+                    <div className="text-gray-500 italic text-base">AI is thinking...</div>
                 )}
+
                 <div ref={messagesEndRef} />
             </div>
-
-            <form onSubmit={sendMessage} className="p-4 border-t border-gray-200 flex gap-2">
-                <input
-                    type="text"
-                    className="flex-1 border border-gray-300 rounded-full px-4 py-2 focus:outline-none focus:border-primary"
-                    placeholder="Type your answer..."
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    disabled={loading}
-                />
-                <button
-                    type="submit"
-                    disabled={loading || !input.trim()}
-                    className="bg-primary text-white p-2 rounded-full hover:bg-indigo-700 disabled:bg-gray-400"
-                >
-                    <Send size={20} />
-                </button>
-            </form>
         </div>
     );
 };
